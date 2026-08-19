@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+:root{
+    --cinza-escuro: #2B2A28;
+    --cinza: #6B6D6F; /* azulado */
+    --cinza-claro: #C7CBD5; /* azulado */
+    --accent: #F53200;
+}
+
+*{
+    padding: 0; 
+    margin: 0; 
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body{
+    background-color: #EDEDED;
+    color: #000;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* header */
+header{
+    background-color: var(--cinza-escuro);
+    border-bottom: solid 2px var(--accent);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    width: 100%;
+}
+
+header>a>img{
+    display: block;
+    width: 109px;
+    height: auto;
+}
+
+/* main */
+main>*:not(.card-largo){
+    padding: 0.5em;
+}
+
+/* botões */
+button, input[type="submit"]{ /* averiguar */
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0px;
+    border-radius: 5px;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+button:not(header button){padding: 8px 20px;}
+button:hover,input[type="submit"]:hover{opacity: 0.85;}
+
+.btn-vermelho{
+    background-color: var(--accent);
+    color: #fff;
+}
+
+.btn-preto{
+    border: 1px solid #000;
+    color: #000;
+}
+
+/* menu */
+.menu{
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: none;
+    flex-direction: column;
+    width: 220px;
+	cursor: pointer;
+    list-style: none;
+}
+
+.menu li{padding: 0.56em 0.756em;}
+.menu li:not(:last-of-type){border-bottom: 1px solid var(--cinza-claro);}
+.menu li:hover{background-color: #f0f1f4;}
+
+.menu.visivel{display: flex;}
+
+#menu-nav{
+    background-color: var(--cinza-escuro);
+    width: 100%;
+    top: 56px;
+    right: 0px;
+}
+#menu-nav li:not(:last-of-type){border-bottom: 1px solid #353535;}
+#menu-nav li:last-of-type{color: var(--accent);}
+#menu-nav li:hover{background-color: #272624;}
+
+/* form */
+input[type="text"], input[type="password"], select{
+    background: #fff;
+    border: 1px solid var(--cinza-claro);
+    margin: 8px 0 16px 0;
+    padding: 8px 10px;
+    border-radius: 4px;
+    outline: none;
+    width: 100%;
+}
+
+/* misc */
+a{color: inherit;text-decoration: inherit;}
+.card-branco{
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 1em;
+}
+
+/* responsividade básica */
+@media (min-width: 600px){
+  #menu-nav{
+    width: 220px;
+  }
+  input[type="text"], input[type="password"], select{
+    width: 30vw;
+    min-width: 400px;
+  }
+}

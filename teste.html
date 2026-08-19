@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão PROMO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+
+<!--TODO: Importar esse header-->
+<header>
+    <a href="" aria-label="PROMOS">
+        <img src="src/Promos Logotipo.png" alt="PROMOS - Projetos Moldando Sonhos">
+    </a>
+
+    <nav>
+        <button data-menu="menu-nav"><i class="fa-solid fa-bars"></i></button>
+        <ul id="menu-nav" class="menu">
+            <li><a href=""><i class="fa-solid fa-user-group"></i> Usuários</a></li>
+            <li><a href=""><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
+            <li><a href=""><i class="fa-solid fa-calendar-check"></i> Presença</a></li>
+            <li><a href=""><i class="fa-solid fa-calendar-days"></i> Histórico</a></li>
+            <li><a href=""><i class="fa-solid fa-bell"></i> Notificações</a></li>
+            <li><a href=""><i class="fa-solid fa-right-from-bracket"></i> Sair</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="card-branco card-largo">
+        <h2>teste h2</h2>
+        <h3>teste h3</h3>
+        <p>teste p</p>
+        <!--teste do js de menu-->
+        <button data-menu="menu-test"><i class="fa-solid fa-bars"></i></button>
+        <ul id="menu-test" class="menu">
+            <li><a href=""><i class="fa-solid fa-user-group"></i> Usuários</a></li>
+            <li><a href=""><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
+            <li><a href=""><i class="fa-solid fa-calendar-check"></i> Presença</a></li>
+            <li><a href=""><i class="fa-solid fa-calendar-days"></i> Histórico</a></li>
+            <li><a href=""><i class="fa-solid fa-bell"></i> Notificações</a></li>
+            <li><a href=""><i class="fa-solid fa-right-from-bracket"></i> Sair</a></li>
+        </ul>
+    </section>
+    
+    <section>
+        <p>teste</p>
+    </section>
+
+    <section>
+        <!--usar essa classe pra tudo com fundo branco e sombra-->
+        <div class="card-branco">
+            <p>teste card</p>
+            <button class="btn-vermelho">exemplo botao</button>
+            <button class="btn-preto">exemplo botao</button>
+
+            <br>
+            <label for="teste1">teste type=text: </label><br>
+            <input type="text" name="teste1" id="teste1" placeholder="teste1" />
+            <br>
+            <label for="teste3">teste type=password: </label><br>
+            <input type="password" name="teste3" id="teste13" placeholder="teste3" />
+            <br>
+            <label for="teste2">teste select: </label><br>
+            <select name="teste2" id="pet-teste2">
+                <option value="">selecione algo</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+    </section>
+</main>
+
+<script src="js/menu.js"></script>
+
+</body>
+</html>
