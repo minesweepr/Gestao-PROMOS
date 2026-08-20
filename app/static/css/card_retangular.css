@@ -1,0 +1,31 @@
+#usuarios{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.card-retangular, .flx{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-retangular>div>i{font-size: 38px; margin-right: 10px;}
+.usuario-tipo{font-size: small;}
+
+.btn-quadrado{
+    padding: 8px 0!important;
+    width: 40px;
+}
+
+/* responsividade básica */
+@media (min-width: 600px){
+    .card-retangular{
+        width: 30vw;
+        min-width: 400px;
+    }
+    #usuarios{
+        flex-direction: row;
+    }
+}

@@ -16,7 +16,6 @@
 body{
     background-color: #EDEDED;
     color: #000;
-    overflow: hidden;
     height: 100vh;
     width: 100vw;
 }
@@ -55,7 +54,7 @@ button, input[type="submit"]{
 	cursor: pointer;
 	outline: inherit;
 }
-button:not(header button){padding: 8px 20px;}
+button:not(.menu-dropdown){padding: 8px 20px;}
 button:hover,input[type="submit"]:hover{opacity: 0.85;}
 
 .btn-vermelho{
@@ -72,6 +71,7 @@ button:hover,input[type="submit"]:hover{opacity: 0.85;}
 .menu{
     display: none;
     position: absolute;
+    right: 20px;
     background-color: #fff;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
@@ -88,19 +88,20 @@ button:hover,input[type="submit"]:hover{opacity: 0.85;}
 
 .menu.visivel{display: flex;}
 
-#menu-nav{
+#menu-header{
     background-color: var(--cinza-escuro);
     width: 100%;
     top: 56px;
     right: 0px;
 }
-#menu-nav li:not(:last-of-type){border-bottom: 1px solid #353535;}
-#menu-nav li:last-of-type{color: var(--accent);}
-#menu-nav li:hover{background-color: #272624;}
+#menu-header li:not(:last-of-type){border-bottom: 1px solid #353535;}
+#menu-header li:last-of-type{color: var(--accent);}
+#menu-header li:hover{background-color: #272624;}
 
 /* form */
 input[type="text"], input[type="password"],
-input[type="email"], select{
+input[type="email"], input[type="date"], 
+input[type="number"], select, .input{
     background: #fff;
     border: 1px solid var(--cinza-claro);
     margin: 8px 0 16px 0;
@@ -120,12 +121,16 @@ a{color: inherit;text-decoration: inherit;}
 
 /* responsividade básica */
 @media (min-width: 600px){
-  #menu-nav{
+  #menu-header{
     width: 220px;
   }
   input[type="text"], input[type="password"],
-  input[type="email"], select{
+  input[type="email"], input[type="date"], 
+  input[type="number"], select, .input{
     width: 30vw;
     min-width: 400px;
+  }
+  .menu{
+    right: auto;
   }
 }

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="card-branco card-largo">
+    {% include "components/barra_pesquisa.html" %}
+</section>
+
+<section id="usuarios">
+    <article class="card-branco usuario card-retangular">
+        <div class="usuario-info flx">
+            <i class="fa-solid fa-circle-user"></i>
+            <h4 class="usuario-nome">Nome</h4>
+        </div>
+
+        <button class="btn-vermelho btn-quadrado">P</button>
+    </article>
+
+    <article class="card-branco usuario card-retangular">
+        <div class="usuario-info flx">
+            <i class="fa-solid fa-circle-user"></i>
+            <h4 class="usuario-nome">Nome</h4>
+        </div>
+
+        <button class="btn-preto btn-quadrado">A</button>
+    </article>
+</section>
+{% endblock %}

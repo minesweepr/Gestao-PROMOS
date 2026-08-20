@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<form class="card-branco card-largo">
+    <h2>Editar Usuário</h2>
+    <section>
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" id="nome" placeholder="Digite o nome completo" />
+    </section>
+    
+    <section>
+        <label for="cpf">CPF:</label>
+        <input type="text" name="cpf" id="cpf" placeholder="Digite o CPF" />
+    </section>
+    
+    <section>
+        <label for="cargo">Cargo do Usuário:</label>
+        <select name="cargo" id="cargo">
+            <option value="" disabled selected>Selecione o Cargo</option>
+            <option value="1">Administrador</option>
+            <option value="2">Aluno</option>
+            <option value="3">Estagiário</option>
+            <option value="4">Personal Trainer</option>
+        </select>
+    </section>
+    <!--TODO: a partir da escolha do cargo, aparece o tipo de informação dele.
+              não precisa ser do jeito que eu fiz, com diferentes articles,
+              é só para visualizar a ideia-->
+    <article id="info-aluno">
+        <section>
+            <label for="dnasc">Data de Nascimento:</label>
+            <input type="date" name="dnasc" id="dnasc" />
+        </section>
+        
+        <section>
+            <label for="cobranca">Tipo de Cobrança:</label>
+            <select name="cobranca" id="cobranca">
+                <option value="" disabled selected>Selecione a Cobrança</option>
+                <option value="1">Meia</option>
+                <option value="2">Inteira</option>
+                <option value="3">Gratuidade</option>
+                <option value="4">Outro</option>
+            </select>
+        </section>
+        
+        <section>
+            <label for="saldo">Saldo:</label>
+            <input type="number" name="saldo" id="saldo" placeholder="R$" />
+        </section>
+        
+        <section>
+            <label for="situacao">Situação:</label>
+            <select name="situacao" id="situacao">
+                <option value="1">Ativo</option> <!--TODO: começa com o que esta no BDD-->
+                <option value="2">Inativo</option>
+            </select>
+        </section>
+    </article>
+
+    <article id="info-funcionario">
+        <section>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" placeholder="Digite o email" />
+        </section>
+    </article>
+
+    <section>
+        <button class="btn-preto">Cancelar</button>
+        <button class="btn-vermelho">Cadastrar</button>
+    </section>
+</form>
+{% endblock %}

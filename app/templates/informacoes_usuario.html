@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+<style>
+    .informacoes-usuario{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .informacoes-usuario>article>p:last-child{color: var(--cinza); text-align: left;}
+    .informacoes-usuario>article:not(:last-of-type){border-bottom: 1px solid var(--cinza-claro); padding-bottom: 15px;}
+
+    .acoes{
+        display: grid; 
+        grid-template-columns: 1fr 1fr;
+        color: var(--accent);
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 0px;
+    }
+    .acoes>a:last-of-type{grid-column: 1 / -1;}
+    .acoes>a{
+        border-top: 1px solid var(--cinza-claro);
+        border-right: 1px solid var(--cinza-claro);
+        padding: 8px 0px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block conteudo %}
+<section class="card-branco card-largo informacoes-usuario">
+    <article class="usuario card-retangular">
+        <div class="usuario-info flx">
+            <i class="fa-solid fa-circle-user"></i>
+            <h4 class="usuario-nome">Nome</h4>
+        </div>
+        
+        <button class="btn-vermelho btn-quadrado"><i class="fa-regular fa-trash-can"></i></button>
+    </article>
+    
+    <article class="flx">
+        <p id="cpf">CPF</p>
+        <P id="usuario-cpf">1234567890</P>
+    </article>
+    
+    <article class="flx">
+        <p id="dmatricula">D. Matrícula</p>
+        <P id="usuario-dmatricula">10/10/2010</P>
+    </article>
+    
+    <article class="flx">
+        <p id="{INSERIR}">{VAR_EX}</p>
+        <P id="usuario-{INSERIR}">{VAR_USU_EX}</P>
+    </article>
+</section>
+
+<section class="card-branco card-largo acoes">
+    <a href=""><i class="fa-regular fa-calendar-days"></i> HISTÓRICO</a>
+    <a href=""><i class="fa-regular fa-file"></i> AVALIAÇÕES</a> <!--TODO: DISPLAY NONE SE USUARIO NAO FOR ALUNO-->
+    <a href="/editar_usuario"><i class="fa-regular fa-pen-to-square"></i> EDITAR</a>
+</section>
+{% endblock %}

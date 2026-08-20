@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="card-branco card-largo filtros">
+    {% include "components/barra_pesquisa.html" %}
+
+    <article>
+        <button class="btn-preto selecionado">Aluno</button>
+        <button class="btn-preto">Administrador</button>
+        <button class="btn-preto">Treinador</button>
+    </article>
+</section>
+
+<section id="usuarios">
+    <article class="card-branco usuario card-retangular">
+        <div class="usuario-info flx">
+            <i class="fa-solid fa-circle-user"></i>
+            <div>
+                <h4 class="usuario-nome">Nome</h4>
+                <p class="usuario-tipo">Tipo</p>
+            </div>
+        </div>
+
+        <nav>
+            <button data-menu="menu-usuario-1" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical usuario-mais"></i></button>
+            <ul id="menu-usuario-1" class="menu">
+                <li><a href=""><i class="fa-regular fa-eye"></i> Checar Informações</a></li>
+                <li><a href=""><i class="fa-regular fa-pen-to-square"></i> Editar Informações</a></li>
+                <li><a href=""><i class="fa-regular fa-calendar-check"></i> Dar Presença</a></li>
+                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
+            </ul>
+        </nav>
+    </article>
+    
+    <article class="card-branco usuario card-retangular">
+        <div class="usuario-info flx">
+            <i class="fa-solid fa-circle-user"></i>
+            <div>
+                <h4 class="usuario-nome">Nome</h4>
+                <p class="usuario-tipo">Tipo</p>
+            </div>
+        </div>
+
+        <nav>
+            <button data-menu="menu-usuario-2" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical usuario-mais"></i></button>
+            <ul id="menu-usuario-2" class="menu">
+                <li><a href=""><i class="fa-regular fa-eye"></i> Checar Informações</a></li>
+                <li><a href=""><i class="fa-regular fa-pen-to-square"></i> Editar Informações</a></li>
+                <li><a href=""><i class="fa-regular fa-calendar-check"></i> Dar Presença</a></li>
+                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
+            </ul>
+        </nav>
+    </article>
+</section>
+{% endblock %}

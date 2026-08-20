@@ -6,20 +6,22 @@
     <title>Gestão PROMO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block estilo %}
+    {% endblock %}
 </head>
 <body>
 
 <header>
-    <a href="" aria-label="PROMOS">
+    <a href="/presenca" aria-label="PROMOS">
         <img src="{{ url_for('static', filename='src/Promos Logotipo.png') }}" alt="PROMOS - Projetos Moldando Sonhos">
     </a>
 
     <nav>
-        <button data-menu="menu-nav"><i class="fa-solid fa-bars"></i></button>
-        <ul id="menu-nav" class="menu">
-            <li><a href=""><i class="fa-solid fa-user-group"></i> Usuários</a></li>
-            <li><a href=""><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
-            <li><a href=""><i class="fa-solid fa-calendar-check"></i> Presença</a></li>
+        <button data-menu="menu-header" class="menu-dropdown"><i class="fa-solid fa-bars"></i></button>
+        <ul id="menu-header" class="menu">
+            <li><a href="/usuarios"><i class="fa-solid fa-user-group"></i> Usuários</a></li>
+            <li><a href="/cadastrar_usuario"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
+            <li><a href="/presenca"><i class="fa-solid fa-calendar-check"></i> Presença</a></li>
             <li><a href=""><i class="fa-solid fa-calendar-days"></i> Histórico</a></li>
             <li><a href=""><i class="fa-solid fa-bell"></i> Notificações</a></li>
             <li><a href=""><i class="fa-solid fa-right-from-bracket"></i> Sair</a></li>

@@ -1,0 +1,19 @@
+form section, form{
+    display: flex;
+    flex-direction: column;
+}
+
+form section:has(button){
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
+}
+form button{flex: 1;}
+h2{margin: 20px auto;}
+
+/* responsividade básica */
+@media (min-width: 600px){
+  form{
+    align-items: center;
+  }
+}
