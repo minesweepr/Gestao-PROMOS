@@ -1,0 +1,2 @@
+FLASK_APP=gestao.py
+FLASK_DEBUG=1
