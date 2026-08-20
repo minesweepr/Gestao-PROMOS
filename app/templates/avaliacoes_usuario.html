@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="flx">
+    <h2>Avaliações</h2>
+    <button class="btn-vermelho">Importar <i class="fa-solid fa-download"></i></button>
+</section>
+
+<section id="arquivos">
+    <article class="card-branco arquivo card-retangular">
+        <div class="arquivo-info flx">
+            <i class="fa-solid fa-table-list"></i>
+            <div>
+                <h4 class="arquivo-nome">Nome</h4>
+            </div>
+        </div>
+
+        <nav>
+            <button data-menu="menu-arquivo-1" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i></button>
+            <ul id="menu-arquivo-1" class="menu">
+                <li><a href=""><i class="fa-regular fa-eye"></i> Visualizar</a></li>
+                <li><a href=""><i class="fa-solid fa-upload"></i> Exportar</a></li>
+                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
+            </ul>
+        </nav>
+    </article>
+    
+    <article class="card-branco arquivo card-retangular">
+        <div class="arquivo-info flx">
+            <i class="fa-solid fa-table-list"></i>
+            <div>
+                <h4 class="arquivo-nome">Nome</h4>
+            </div>
+        </div>
+
+        <nav>
+            <button data-menu="menu-arquivo-2" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i></button>
+            <ul id="menu-arquivo-2" class="menu">
+                <li><a href=""><i class="fa-regular fa-eye"></i> Visualizar</a></li>
+                <li><a href=""><i class="fa-solid fa-upload"></i> Exportar</a></li>
+                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
+            </ul>
+        </nav>
+    </article>
+</section>
+{% endblock %}

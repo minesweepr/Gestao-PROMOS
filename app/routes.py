@@ -9,6 +9,10 @@ def index():
 def presenca():
     return render_template('presenca.html')
 
+@app.route('/planilhas')
+def planilhas():
+    return render_template('planilhas.html')
+
 @app.route('/usuarios')
 def usuarios():
     return render_template('usuarios.html')
@@ -16,6 +20,10 @@ def usuarios():
 @app.route('/informacoes_usuario')
 def informacoes_usuario():
     return render_template('informacoes_usuario.html')
+
+@app.route('/avaliacoes_usuario')
+def avaliacoes_usuario():
+    return render_template('avaliacoes_usuario.html')
 
 @app.route('/editar_usuario')
 def editar_usuario():

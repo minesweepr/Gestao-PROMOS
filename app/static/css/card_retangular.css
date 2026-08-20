@@ -1,4 +1,4 @@
-#usuarios{
+#usuarios, #arquivos{
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -12,7 +12,7 @@
 }
 
 .card-retangular>div>i{font-size: 38px; margin-right: 10px;}
-.usuario-tipo{font-size: small;}
+.usuario-tipo, .arquivo-tipo{font-size: small;}
 
 .btn-quadrado{
     padding: 8px 0!important;
@@ -25,7 +25,7 @@
         width: 30vw;
         min-width: 400px;
     }
-    #usuarios{
+    #usuarios, #arquivos{
         flex-direction: row;
     }
 }
