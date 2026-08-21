@@ -20,6 +20,9 @@ body{
     width: 100vw;
 }
 
+.bg-branco {
+    background-color: #fff;
+}
 /* header */
 header{
     background-color: var(--cinza-escuro);

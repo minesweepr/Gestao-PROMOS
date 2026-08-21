@@ -3,6 +3,10 @@ from flask import render_template
 
 @app.route('/')
 def index():
+    return render_template('login.html')
+
+@app.route('/teste')
+def teste():
     return render_template('teste.html')
 
 @app.route('/presenca')
