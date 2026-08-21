@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/historico.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="card-branco  card-largo filtros">
+    {% include "components/barra_pesquisa.html" %}
+
+    <article>
+        <button class="btn-preto selecionado">Período <i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-preto">Tipo <i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-preto">Pagamento <i class="fa-solid fa-chevron-down"></i></button>
+    </article>
+</section>
+
+<section class="titulo-h2 flx">
+    <h2>Histórico Geral</h2>
+    <button class="btn-vermelho import">Importar <i class="fa-solid fa-download"></i></button>
+</section>
+
+<section id="dados">
+    <p>Período: Agosto/2026</p>
+    
+    <article class="card-branco hist-geral">
+        <h3>15/06/2026</h3>
+        <div class="hist-aluno" onclick="window.location.href='/historico_aluno'"> <!-- TODO vai o ID - /historico_aluno/id - backend -->
+            <h4 class="hist-geral-nome">Thiago Farias de Souza</h4>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+            </div>
+        </div>
+
+        
+        <div class="hist-aluno" onclick="window.location.href='/historico_aluno'">
+            <h4 class="hist-geral-nome">Isabela de Oliveira Athayde</h4>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+            </div>
+        </div>
+        <div class="hist-aluno" onclick="window.location.href='/historico_aluno'">
+            <h4 class="hist-geral-nome">Gabriela da Costa Castro</h4>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pago)</p>
+            </div>
+        </div>
+    </article>
+
+    <!-- quando fizer o back deletar esse article abaixo -->
+    <article class="card-branco hist-geral">
+        <h3>14/06/2026</h3>
+        <div class="hist-aluno">
+            <h4 class="hist-geral-nome">Thiago Farias de Souza</h4>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+            </div>
+        </div>
+        <div class="hist-aluno">
+            <h4 class="hist-geral-nome">Isabela de Oliveira Athayde</h4>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pago)</p>
+            </div>
+        </div>
+        <div class="hist-aluno">
+            <h4 class="hist-geral-nome">Gabriela da Costa Castro</h4>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pago)</p>
+            </div>
+        </div>
+    </article>
+    
+</section>
+{% endblock %}

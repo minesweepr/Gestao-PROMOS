@@ -1,0 +1,28 @@
+#dados {
+    padding: 1rem;
+}
+section.titulo-h2 {
+    padding: 2rem 1rem 0;
+}
+.fa-circle {
+    font-size: 8px; 
+    padding-right: 8px;
+}
+.hist-aluno {
+    margin: 0.9rem 0.9rem 1.2rem;
+}
+.hist-aluno:last-of-type {
+    margin: 0.9rem 0.9rem 0.5rem;
+}
+.hist-info {
+    margin: 5px 0.9rem;
+}
+h3,h4 {
+    font-weight: 600;
+}
+.hist-geral {
+    margin: 1.4rem 0 0;
+}
+button.import{
+    padding: 8px;
+}

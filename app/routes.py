@@ -9,6 +9,14 @@ def index():
 def teste():
     return render_template('teste.html')
 
+@app.route('/historico_geral')
+def historico_geral():
+    return render_template('historico_geral.html')
+
+@app.route('/historico_aluno')
+def historico_aluno():
+    return render_template('historico_aluno.html')
+
 @app.route('/notificacoes')
 def notificacoes():
     return render_template('notificacoes.html')
