@@ -19,6 +19,10 @@
     width: 40px;
 }
 
+section.titulo-h2 {
+    padding-top: 2rem;
+}
+
 /* responsividade básica */
 @media (min-width: 600px){
     .card-retangular{

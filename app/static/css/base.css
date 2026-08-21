@@ -11,6 +11,7 @@
     margin: 0; 
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body{
@@ -31,13 +32,13 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em;
+    padding: 1.2em 1em 1em;
     width: 100%;
 }
 
 header>a>img{
     display: block;
-    width: 109px;
+    width: 150px;
     height: auto;
 }
 
@@ -94,12 +95,16 @@ button:hover,input[type="submit"]:hover{opacity: 0.85;}
 #menu-header{
     background-color: var(--cinza-escuro);
     width: 100%;
-    top: 56px;
+    top: 68px;
     right: 0px;
 }
 #menu-header li:not(:last-of-type){border-bottom: 1px solid #353535;}
 #menu-header li:last-of-type{color: var(--accent);}
 #menu-header li:hover{background-color: #272624;}
+
+.fa-bars {
+    font-size: 26px;
+}
 
 /* form */
 input[type="text"], input[type="password"],
