@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/historico.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="card-branco  card-largo filtros">
+    <article>
+        <button class="btn-preto selecionado">Período <i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-preto">Tipo <i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-preto">Pagamento <i class="fa-solid fa-chevron-down"></i></button>
+    </article>
+
+    <!-- TODO adicionar os aba dos 3 filtros -->
+</section>
+
+<section class="titulo-h2 flx">
+    <h2>Histórico de <span id="nome-aluno">nome da pessoa</span></h2>
+</section>
+
+<section id="dados">
+    <p>Última presença: 15/08/2026</p>
+    <p>Saldo devedor: R$ 60,00</p>
+    
+    <article class="card-branco hist-geral">
+        <h3>15/06/2026</h3>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+            </div>
+    </article>
+    <article class="card-branco hist-geral">
+        <h3>14/06/2026</h3>
+            <div class="hist-info">
+                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
+                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+            </div>
+    </article>
+    
+</section>
+{% endblock %}
