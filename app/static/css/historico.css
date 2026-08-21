@@ -1,28 +1,34 @@
-#dados {
-    padding: 1rem;
+#dados { padding: 1rem; }
+html, body { overflow-x: hidden; }
+section.titulo-h2 { padding: 2rem 1rem 0; }
+.fa-circle { font-size: 8px; padding-right: 8px; }
+.hist-aluno { margin: 0.9rem 0.9rem 1.2rem; }
+.hist-aluno:last-of-type { margin: 0.9rem 0.9rem 0.5rem; }
+.hist-info { margin: 5px 0.9rem; }
+h3,h4, nav p  { font-weight: 600; }
+.hist-geral { margin: 1.4rem 0 0; padding: clamp(1em, 5vw, 2.2em) clamp(1em, 5vw, 6em); }
+button.import{ padding: 8px; }
+section.container-f {
+    padding: 0em;
+    background-color: #fff;
+    gap: 0;
 }
-section.titulo-h2 {
-    padding: 2rem 1rem 0;
+section.filtros > article.filtro-art {
+    padding: 12px;
+    max-width: 326px;
+    border-top: none;
 }
-.fa-circle {
-    font-size: 8px; 
-    padding-right: 8px;
+.pesquisa { padding: 10px; border-bottom: 1px solid var(--cinza-claro); }
+.filtros > .menu {
+    position: static;
+    width: 100%;
+    padding: 10px 15px;
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.2);
 }
-.hist-aluno {
-    margin: 0.9rem 0.9rem 1.2rem;
+ul {
+    padding: 0.56em 1.756em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
 }
-.hist-aluno:last-of-type {
-    margin: 0.9rem 0.9rem 0.5rem;
-}
-.hist-info {
-    margin: 5px 0.9rem;
-}
-h3,h4 {
-    font-weight: 600;
-}
-.hist-geral {
-    margin: 1.4rem 0 0;
-}
-button.import{
-    padding: 8px;
-}
+@media (min-width: 600px){ section.titulo-h2, #dados { padding: 2rem clamp(1em, 5vw, 6em) 1em; } }

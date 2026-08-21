@@ -7,14 +7,12 @@
 {% endblock %}
 
 {% block conteudo %}
-<section class="card-branco  card-largo filtros">
-    {% include "components/barra_pesquisa.html" %}
+<section class="container-f filtros">
+    <section class="pesquisa" >
+        {% include "components/barra_pesquisa.html" %}
+    </section>
 
-    <article>
-        <button class="btn-preto selecionado">Período <i class="fa-solid fa-chevron-down"></i></button>
-        <button class="btn-preto">Tipo <i class="fa-solid fa-chevron-down"></i></button>
-        <button class="btn-preto">Pagamento <i class="fa-solid fa-chevron-down"></i></button>
-    </article>
+    {% include "components/dropdown_filtro.html" %}
 </section>
 
 <section class="titulo-h2 flx">
