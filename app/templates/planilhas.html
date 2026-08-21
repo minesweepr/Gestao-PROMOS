@@ -2,6 +2,18 @@
 
 {% block estilo %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+    <style>
+        main {
+            margin: 2rem auto;
+        } 
+
+        @media (min-width: 426px){
+            main {
+                margin: 0;
+                padding: 2rem clamp(0.4em, 4vw, 6em) 1em;
+            } 
+        }
+    </style>
 {% endblock %}
 
 {% block conteudo %}
