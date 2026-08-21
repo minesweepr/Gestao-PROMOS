@@ -9,6 +9,10 @@ def index():
 def teste():
     return render_template('teste.html')
 
+@app.route('/notificacoes')
+def notificacoes():
+    return render_template('notificacoes.html')
+
 @app.route('/presenca')
 def presenca():
     return render_template('presenca.html')

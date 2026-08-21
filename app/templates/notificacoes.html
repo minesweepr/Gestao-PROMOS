@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão PROMO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notificacoes.css') }}">
+    {% endblock %}
+</head>
+<body class="bg-branco">
+
+<header class="flx bg-branco">
+    <a href="#">
+        <i class="fa-solid fa-chevron-left"></i>
+    </a>
+
+    <div class="center-flx">
+        <i class="fa-regular fa-bell"></i>
+        <h1>Notificações</h1>
+        <p class="accent-notif"><span>2</span> não lidas</p> <!--Tornar dinamico com backend qtd de mensagens n lidas-->
+    </div>
+
+    <div></div>
+
+</header>
+<main>
+    {% block conteudo %} <!--Tornar dinamico com backend, nome, dias e quantidade de mensagens n lidas-->
+    <article class="card-largo notificacao"> 
+        <div class="center-flx notif-content">
+            <i class="fa-solid fa-exclamation"></i>
+
+            <div>
+                <p class="notificacao-titulo">Ausência</p>
+                <p class="notificacao-desc">
+                    <span class="unread">Nome</span> está há <span class="unread">10 dias</span> sem comparecer à academia.
+                </p>
+            </div>
+            <span class="notificacao-alerta accent-notif"></span>
+        </div>
+    </article>
+
+     <article class="card-largo notificacao"> 
+        <div class="center-flx notif-content">
+            <i class="fa-solid fa-exclamation"></i>
+
+            <div>
+                <p class="notificacao-titulo">Ausência</p>
+                <p class="notificacao-desc">
+                    <span>Nome</span> está há <span>10 dias</span> sem comparecer à academia.
+                </p>
+            </div>
+            <span class="notificacao-alerta accent-notif display-notif"></span>
+        </div>
+    </article>
+
+    {% endblock %}
+</main>
+
+
+</body>
+</html>
