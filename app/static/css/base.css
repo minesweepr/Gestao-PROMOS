@@ -32,7 +32,7 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.2em 1em 1em;
+    padding: 1.5em clamp(1em, 5vw, 6em) 1em;
     width: 100%;
 }
 
