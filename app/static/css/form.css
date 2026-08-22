@@ -9,10 +9,10 @@ form section:has(button){
     margin-top: 20px;
 }
 form button{flex: 1;}
-h2{margin: 20px auto;}
+h2{margin: 20px auto; text-align: center;}
 
 /* responsividade básica */
-@media (min-width: 600px){
+@media (min-width: 639px){
   form{
     align-items: center;
   }

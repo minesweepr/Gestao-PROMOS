@@ -32,7 +32,7 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5em clamp(1em, 5vw, 6em) 1em;
+    padding: 1.234em 1em;
     width: 100%;
 }
 
@@ -95,7 +95,7 @@ button:hover,input[type="submit"]:hover{opacity: 0.85;}
 #menu-header{
     background-color: var(--cinza-escuro);
     width: 100%;
-    top: 68px;
+    top: 72px;
     right: 0px;
 }
 #menu-header li:not(:last-of-type){border-bottom: 1px solid #353535;}
@@ -128,17 +128,20 @@ a{color: inherit;text-decoration: inherit;}
 }
 
 /* responsividade básica */
-@media (min-width: 600px){
+@media (min-width: 639px){
   #menu-header{
     width: 220px;
   }
-  input[type="text"], input[type="password"],
-  input[type="email"], input[type="date"], 
-  input[type="number"], select, .input{
-    width: 30vw;
-    min-width: 400px;
+  #pesquisa, form>*{
+    width: 590px;
+  }
+  .input>input{
+    width: 100%;
   }
   .menu{
     right: auto;
+  }
+  main>*:not(.input) {
+    padding-inline: clamp(1em, 5vw, 6em) !important;
   }
 }

@@ -5,10 +5,6 @@ from flask import render_template
 def index():
     return render_template('login.html')
 
-@app.route('/teste')
-def teste():
-    return render_template('teste.html')
-
 @app.route('/historico_geral')
 def historico_geral():
     return render_template('historico_geral.html')

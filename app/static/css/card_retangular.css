@@ -1,6 +1,6 @@
 #usuarios, #arquivos{
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
     gap: 12px;
     margin-top: 8px;
 }
@@ -21,18 +21,7 @@
 
 /* responsividade básica */
 @media (min-width: 600px){
-    .card-retangular{
-        width: 30vw;
-        min-width: 400px;
-    }
-    #usuarios,
-    #arquivos, .wrap-list {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .usuario {
-        flex: 1 1 400px;
-        min-width: 400px;
-    }
+  #usuarios, #arquivos{
+    grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  }
 }

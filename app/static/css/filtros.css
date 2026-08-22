@@ -4,7 +4,6 @@
     align-items: center;
     margin: 0;
     cursor: pointer;
-    width: auto;
 }
 
 .input>input{
@@ -29,4 +28,4 @@
     flex-direction: column;
     gap: 10px;
 }
-.filtros>*:not(:first-child){border-top: 1px solid var(--cinza-claro); padding-top: 10px;}
+.filtros>*:not(:first-child){border-top: 1px solid var(--cinza-claro); padding-top: 10px; margin-top: 5px;}

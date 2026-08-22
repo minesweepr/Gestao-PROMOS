@@ -25,10 +25,9 @@ section.filtros > article.filtro-art {
     padding: 10px 15px;
     box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.2);
 }
-ul {
+main ul {
     padding: 0.56em 1.756em;
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
 }
-@media (min-width: 600px){ section.titulo-h2, #dados { padding: 2rem clamp(1em, 5vw, 6em) 1em; } }
