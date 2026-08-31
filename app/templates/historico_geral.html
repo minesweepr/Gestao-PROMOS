@@ -22,59 +22,23 @@
 
 <section id="dados">
     <p>Período: Agosto/2026</p>
-    
-    <article class="card-branco hist-geral">
-        <h3>15/06/2026</h3>
-        <div class="hist-aluno" onclick="window.location.href='/historico_aluno'"> <!-- TODO vai o ID - /historico_aluno/id - backend -->
-            <h4 class="hist-geral-nome">Thiago Farias de Souza</h4>
-            <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
-            </div>
-        </div>
 
-        
-        <div class="hist-aluno" onclick="window.location.href='/historico_aluno'">
-            <h4 class="hist-geral-nome">Isabela de Oliveira Athayde</h4>
-            <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
-            </div>
-        </div>
-        <div class="hist-aluno" onclick="window.location.href='/historico_aluno'">
-            <h4 class="hist-geral-nome">Gabriela da Costa Castro</h4>
-            <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pago)</p>
-            </div>
-        </div>
-    </article>
-
-    <!-- quando fizer o back deletar esse article abaixo -->
+    {% for registro in historico %}
     <article class="card-branco hist-geral">
-        <h3>14/06/2026</h3>
-        <div class="hist-aluno">
-            <h4 class="hist-geral-nome">Thiago Farias de Souza</h4>
+        <h3>{{ registro.data }}</h3>
+        {% for aluno in registro.alunos %}
+        <div class="hist-aluno" onclick="window.location.href='/historico_aluno/{{ aluno.id_aluno }}'">
+            <h4 class="hist-geral-nome">{{ aluno.nome }}</h4>
             <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+                  <p> <i class="fa-solid fa-circle" style="color: #00D335;"></i> Presença </p>
+                {% if aluno.pagamento is not none %} <p> <i class="fa-solid fa-circle" style="color: var(--accent);"></i> Pagamento R$ {{ "%.2f"|format(aluno.pagamento)|replace(".", ",") }} ({{ aluno.status_pagamento }}) </p> {% endif %}
             </div>
         </div>
-        <div class="hist-aluno">
-            <h4 class="hist-geral-nome">Isabela de Oliveira Athayde</h4>
-            <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pago)</p>
-            </div>
-        </div>
-        <div class="hist-aluno">
-            <h4 class="hist-geral-nome">Gabriela da Costa Castro</h4>
-            <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pago)</p>
-            </div>
-        </div>
-    </article>
+        {% endfor %}
     
+    </article>
+    {% endfor %}
 </section>
+
+
 {% endblock %}

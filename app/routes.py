@@ -1,29 +1,75 @@
 from app import app
-from flask import render_template
+from flask import render_template, request
+from app.database.alerta import *
+from app.database.arquivo import *
+from app.database.historico import *
 
 @app.route('/')
 def index():
     return render_template('login.html')
 
+## notificacoes, historicos e avaliacoes
+## Routes modificados para receber dados
 @app.route('/historico_geral')
 def historico_geral():
-    return render_template('historico_geral.html')
 
-@app.route('/historico_aluno')
-def historico_aluno():
-    return render_template('historico_aluno.html')
+    periodo = request.args.get('periodo', 'mes')
+    tipo = request.args.get('tipo', 'todos')
+    pagamento = request.args.get('pagamento', 'todos')
+
+    historico = listar_historico(
+        periodo=periodo,
+        tipo=tipo,
+        pagamento=pagamento
+    )
+
+    return render_template(
+        'historico_geral.html',
+        historico=historico,
+        periodo=periodo,
+        tipo=tipo,
+        pagamento=pagamento
+    )
+
+@app.route('/historico_aluno/<int:id_aluno>')
+def historico_aluno(id_aluno):
+    data_aluno = listar_historico_aluno(id_aluno) 
+    return render_template( 'historico_aluno.html', data_aluno=data_aluno )
 
 @app.route('/notificacoes')
 def notificacoes():
-    return render_template('notificacoes.html')
+
+    alertas = listar_alertas()
+    nao_lidas = contar_nao_lidas()
+
+    return render_template(
+        'notificacoes.html',
+        alertas=alertas,
+        nao_lidas=nao_lidas
+    )
+
+@app.route('/notificacoes/<int:id_alerta>/visualizar', methods=['PATCH'])
+def visualizar_notificacao(id_alerta):
+    visualizar_alerta(id_alerta)
+    return '', 204
+
+@app.route('/avaliacoes_usuario')
+def avaliacoes_usuario():
+    avaliacoes = listar_avaliacoes()
+    return render_template('avaliacoes_usuario.html',avaliacoes=avaliacoes)
+
+@app.route('/avaliacoes/excluir/<int:id_avaliacao>', methods=['POST'])
+def excluir_avaliacao_rota(id_avaliacao):
+
+    excluir_avaliacao(id_avaliacao)
+
+    return redirect(url_for('avaliacoes'))
+## fim notif, avaliacao e historicos
 
 @app.route('/presenca')
 def presenca():
     return render_template('presenca.html')
 
-@app.route('/planilhas')
-def planilhas():
-    return render_template('planilhas.html')
 
 @app.route('/usuarios')
 def usuarios():
@@ -33,9 +79,6 @@ def usuarios():
 def informacoes_usuario():
     return render_template('informacoes_usuario.html')
 
-@app.route('/avaliacoes_usuario')
-def avaliacoes_usuario():
-    return render_template('avaliacoes_usuario.html')
 
 @app.route('/editar_usuario')
 def editar_usuario():
