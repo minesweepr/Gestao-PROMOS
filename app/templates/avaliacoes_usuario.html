@@ -10,41 +10,34 @@
     <button class="btn-vermelho">Importar <i class="fa-solid fa-download"></i></button>
 </section>
 
+<!--TODO: fazer importar, talvez exportar funcionar-->
 <section id="arquivos">
+    {% for avaliacao in avaliacoes %}
     <article class="card-branco arquivo card-retangular">
         <div class="arquivo-info flx">
             <i class="fa-solid fa-table-list"></i>
             <div>
-                <h4 class="arquivo-nome">Nome</h4>
+                <h4 class="arquivo-nome">{{ avaliacao.nome }}</h4>
             </div>
         </div>
 
         <nav>
-            <button data-menu="menu-arquivo-1" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i></button>
-            <ul id="menu-arquivo-1" class="menu">
-                <li><a href=""><i class="fa-regular fa-eye"></i> Visualizar</a></li>
-                <li><a href=""><i class="fa-solid fa-upload"></i> Exportar</a></li>
-                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
+            <button data-menu="menu-arquivo-{{ avaliacao.id_avaliacao }}" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i></button>
+            <ul id="menu-arquivo-{{ avaliacao.id_avaliacao }}" class="menu">
+                <li><a href="/avaliacoes/{{ avaliacao.id_avaliacao }}"><i class="fa-regular fa-eye"></i> Visualizar</a></li>
+                <li><a href="/avaliacoes/exportar/{{ avaliacao.id_avaliacao }}"><i class="fa-solid fa-upload"></i> Exportar</a></li>
+                <li>
+                    <form action="/avaliacoes/excluir/{{ avaliacao.id_avaliacao }}" method="POST" onsubmit="return confirm('Deseja realmente excluir esta avaliação?');" >
+                        <button type="submit">
+                            <i class="fa-regular fa-trash-can"></i>
+                            Excluir
+                        </button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </article>
-    
-    <article class="card-branco arquivo card-retangular">
-        <div class="arquivo-info flx">
-            <i class="fa-solid fa-table-list"></i>
-            <div>
-                <h4 class="arquivo-nome">Nome</h4>
-            </div>
-        </div>
-
-        <nav>
-            <button data-menu="menu-arquivo-2" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i></button>
-            <ul id="menu-arquivo-2" class="menu">
-                <li><a href=""><i class="fa-regular fa-eye"></i> Visualizar</a></li>
-                <li><a href=""><i class="fa-solid fa-upload"></i> Exportar</a></li>
-                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
-            </ul>
-        </nav>
-    </article>
+    {% endfor %}
 </section>
+
 {% endblock %}
