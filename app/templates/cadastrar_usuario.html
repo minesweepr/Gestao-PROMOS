@@ -5,64 +5,115 @@
 {% endblock %}
 
 {% block conteudo %}
-<form class="card-branco card-largo">
+<form id="formCadastro" class="card-branco card-largo" method="POST">
     <h2>Cadastrar Usuário</h2>
+    
+    <!-- Campos Comuns -->
     <section>
         <label for="nome">Nome:</label>
-        <input type="text" name="nome" id="nome" placeholder="Digite o nome completo" />
+        <input type="text" name="nome" id="nome" placeholder="Digite o nome completo" required />
     </section>
-    
+
     <section>
-        <label for="cpf">CPF:</label>
-        <input type="text" name="cpf" id="cpf" placeholder="Digite o CPF" />
+        <label for="cpf">CPF (apenas 11 números):</label>
+        <input type="text" name="cpf" id="cpf" placeholder="Digite os 11 dígitos do CPF" maxlength="11" required pattern="\d{11}" title="Digite exatamente 11 números." />
     </section>
-    
+
     <section>
-        <label for="cargo">Cargo do Usuário:</label>
-        <select name="cargo" id="cargo">
-            <option value="" disabled selected>Selecione o Cargo</option>
-            <option value="1">Administrador</option>
-            <option value="2">Aluno</option>
-            <option value="3">Estagiário</option>
-            <option value="4">Personal Trainer</option>
+        <label for="cargo">Perfil / Cargo:</label>
+        <select name="perfil" id="cargo" onchange="alternarCampos()" required>
+            <option value="" disabled selected>Selecione o Cargo ou Perfil</option>
+            <option value="ADMINISTRADOR">Administrador (Usuário)</option>
+            <option value="PERSONAL">Estagiário / Personal (Usuário)</option>
+            <option value="ALUNO">Aluno</option>
         </select>
     </section>
-    <!--TODO: a partir da escolha do cargo, aparece o tipo de informação dele.
-              não precisa ser do jeito que eu fiz, com diferentes articles,
-              é só para visualizar a ideia-->
-    <article id="info-aluno">
+
+    <!-- BLOCO EXCLUSIVO: ALUNO -->
+    <article id="info-aluno" style="display: none;">
+        <section>
+            <label for="telefone">Telefone:</label>
+            <input type="text" name="telefone" id="telefone" placeholder="Digite o telefone" />
+        </section>
+
+        <section>
+            <label for="email_aluno">E-mail do Aluno:</label>
+            <input type="email" name="email_aluno" id="email_aluno" placeholder="Digite o e-mail (opcional)" />
+        </section>
+
         <section>
             <label for="dnasc">Data de Nascimento:</label>
             <input type="date" name="dnasc" id="dnasc" />
         </section>
-        
+
         <section>
-            <label for="cobranca">Tipo de Cobrança:</label>
-            <select name="cobranca" id="cobranca">
-                <option value="" disabled selected>Selecione a Cobrança</option>
-                <option value="1">Meia</option>
-                <option value="2">Inteira</option>
-                <option value="3">Gratuidade</option>
-                <option value="4">Outro</option>
+            <label for="tipo_aluno">Tipo de Aluno:</label>
+            <select name="tipo_aluno" id="tipo_aluno">
+                <option value="" disabled selected>Selecione o Tipo de Aluno</option>
+                <option value="PAGA_INTEIRA">Paga Inteira</option>
+                <option value="PAGA_MEIA">Paga Meia</option>
+                <option value="GRATUIDADE">Gratuidade</option>
             </select>
         </section>
     </article>
 
-    <article id="info-funcionario">
+    <!-- BLOCO EXCLUSIVO: USUÁRIO DO SISTEMA -->
+    <article id="info-funcionario" style="display: none;">
         <section>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Digite o email" />
+            <label for="email">E-mail do Sistema:</label>
+            <input type="email" name="email" id="email" placeholder="Digite o e-mail de acesso" />
         </section>
 
         <section>
             <label for="senha">Senha:</label>
-            <input type="password" name="senha" id="senha" placeholder="Digite a senha" />
+            <input type="password" name="senha" id="senha" placeholder="Mínimo 6 caracteres" minlength="6" />
         </section>
     </article>
 
     <section>
-        <button class="btn-preto">Cancelar</button>
-        <button class="btn-vermelho">Cadastrar</button>
+        <button type="button" class="btn-preto" onclick="window.history.back()">Cancelar</button>
+        <button type="submit" class="btn-vermelho">Cadastrar</button>
     </section>
 </form>
+
+<script>
+function alternarCampos() {
+    const valorSelecionado = document.getElementById('cargo').value;
+    const infoAluno = document.getElementById('info-aluno');
+    const infoFuncionario = document.getElementById('info-funcionario');
+
+    infoAluno.style.display = 'none';
+    infoFuncionario.style.display = 'none';
+
+    if (valorSelecionado === 'ALUNO') {
+        infoAluno.style.display = 'block';
+    } else if (valorSelecionado === 'ADMINISTRADOR' || valorSelecionado === 'PERSONAL') {
+        infoFuncionario.style.display = 'block';
+    }
+}
+
+document.getElementById('formCadastro').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    try {
+        const resposta = await fetch("{{ url_for('cadastrar_usuario') }}", {
+            method: 'POST',
+            body: formData
+        });
+
+        const resultado = await resposta.json();
+
+        alert(resultado.mensagem);
+
+        if (resultado.sucesso) {
+            this.reset();
+            alternarCampos();
+        }
+    } catch (erro) {
+        alert("Erro de conexão ao tentar cadastrar: " + erro);
+    }
+});
+</script>
 {% endblock %}

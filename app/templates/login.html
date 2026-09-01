@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão PROMO</title>
+    <title>Gestão PROMO - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {% block estilo %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
     <style>
         main {
-            height: 100dvh; 
+            height: 100dvh;
             padding: 0 2.6rem;
             display: flex;
             flex-direction: column;
@@ -36,9 +36,9 @@
             margin: 8px 0 16px 0;
             max-width: 400px;
         }
-        input[type="text"], 
-        input[type="password"], 
-        input[type="email"]{
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
             min-width: auto;
         }
         i.fa-solid {
@@ -49,22 +49,35 @@
 </head>
 <body class="bg-branco">
 
+{% if erro %}
+<script>
+    alert("{{ erro }}");
+</script>
+{% endif %}
+
 <main>
     {% block conteudo %}
         <h1>Login</h1>
 
-        <div id="email" class="input input-flex">
-            <input type="text" name="email" id="email" placeholder="E-mail" />
-            <i class="fa-solid fa-user"></i>
-        </div>
-        <div id="senha" class="input input-flex">
-            <input type="password" name="senha" id="senha" placeholder="Senha" />
-            <i class="fa-solid fa-lock"></i>
-        </div>
-        <button class="btn-vermelho" onclick="window.location.href='/presenca'">Entrar</button>
+        <form method="POST" action="{{ url_for('auth.login') }}">
+
+            <div class="input input-flex">
+                <input type="email" name="email" id="email" placeholder="E-mail" required />
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="input input-flex">
+                <input type="password" name="senha" id="senha" placeholder="Senha" required />
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <button type="submit" class="btn-vermelho">
+                Entrar
+            </button>
+
+        </form>
     {% endblock %}
 </main>
-
 
 </body>
 </html>
