@@ -4,6 +4,8 @@ from app import app
 from app.auth import login_required
 from app.database.supabase import supabase, supabase_admin
 
+from app.model.aluno import aluno_listar_todos
+
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
 @login_required
 def cadastrar_usuario():
@@ -91,7 +93,8 @@ def cadastrar_usuario():
 @app.route('/presenca')
 @login_required
 def presenca():
-    return render_template('presenca.html')
+    alunos=[{'id_aluno': a['id_aluno'], 'nome': a['nome']} for a in aluno_listar_todos('ATIVO')]
+    return render_template('presenca.html', alunos=alunos)
 
 @app.route('/historico_geral')
 @login_required

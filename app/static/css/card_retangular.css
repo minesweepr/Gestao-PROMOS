@@ -19,9 +19,17 @@
     width: 40px;
 }
 
+.vazio{
+  text-align: center;
+  color: var(--cinza);
+}
+
 /* responsividade básica */
 @media (min-width: 600px){
   #usuarios, #arquivos{
     grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  }
+  #usuarios:has(.vazio){
+    grid-template-columns: repeat(1, 1fr);
   }
 }

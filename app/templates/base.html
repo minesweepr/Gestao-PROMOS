@@ -17,10 +17,6 @@
     </a>
 
     {% if session.get('usuario_id') %}
-        <div class="info-usuario-header">
-            <span>Olá, <strong>{{ usuario_logado.nome }}</strong> ({{ usuario_logado.cargo }})</span>
-        </div>
-
         <nav>
             <button data-menu="menu-header" class="menu-dropdown"><i class="fa-solid fa-bars"></i></button>
             <ul id="menu-header" class="menu">
@@ -46,6 +42,8 @@
 </main>
 
 <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+{% block js %}
+{% endblock %}
 
 </body>
 </html>

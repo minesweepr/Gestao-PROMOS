@@ -1,0 +1,14 @@
+{% macro card_usuario(nome, tipo='') %}
+<article class="card-branco usuario card-retangular">
+    <div class="usuario-info flx">
+        <i class="fa-solid fa-circle-user"></i>
+        <div>
+            <h4 class="usuario-nome">{{ nome }}</h4>
+            <p class="usuario-tipo">{{ tipo }}</p>
+        </div>
+    </div>
+
+    {{ caller() }}
+
+</article>
+{% endmacro %}

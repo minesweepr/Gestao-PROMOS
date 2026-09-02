@@ -2,3 +2,7 @@
     <input type="text" id="input-busca-usuario" placeholder="Pesquisar usuário...">
     <i class="fas fa-search"></i>
 </div>
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/pesquisa.js') }}"></script>
+{% endblock %}
