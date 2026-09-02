@@ -1,5 +1,5 @@
 from datetime import date
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, session, redirect, url_for
 from app import app
 from app.auth import login_required
 from app.database.supabase import supabase, supabase_admin
@@ -7,6 +7,12 @@ from app.database.supabase import supabase, supabase_admin
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
 @login_required
 def cadastrar_usuario():
+    # Trava Backend: Apenas Administradores podem acessar esta rota
+    if session.get("usuario_cargo") != "ADMINISTRADOR":
+        if request.method == 'POST':
+            return jsonify({"sucesso": False, "mensagem": "Acesso negado: Apenas administradores podem cadastrar usuários."}), 403
+        return redirect(url_for('presenca'))
+
     if request.method == 'POST':
         perfil = request.form.get('perfil')
         nome = request.form.get('nome')
@@ -24,7 +30,6 @@ def cadastrar_usuario():
                 if not senha or len(senha) < 6:
                     return jsonify({"sucesso": False, "mensagem": "A senha deve ter no mínimo 6 caracteres."}), 400
 
-                # Criar conta no Auth
                 res_auth = supabase_admin.auth.admin.create_user({
                     "email": email,
                     "password": senha,
@@ -34,7 +39,6 @@ def cadastrar_usuario():
 
                 auth_user_id = res_auth.user.id if res_auth and res_auth.user else None
 
-                # Inserção manual e explícita na tabela public.usuario
                 dados_usuario = {
                     "nome": nome,
                     "cpf": cpf,
@@ -83,53 +87,46 @@ def cadastrar_usuario():
             return jsonify({"sucesso": False, "mensagem": f"Erro no servidor: {msg_erro}"}), 500
 
     return render_template('cadastrar_usuario.html')
+
 @app.route('/presenca')
 @login_required
 def presenca():
     return render_template('presenca.html')
-
 
 @app.route('/historico_geral')
 @login_required
 def historico_geral():
     return render_template('historico_geral.html')
 
-
 @app.route('/historico_aluno')
 @login_required
 def historico_aluno():
     return render_template('historico_aluno.html')
-
 
 @app.route('/notificacoes')
 @login_required
 def notificacoes():
     return render_template('notificacoes.html')
 
-
 @app.route('/planilhas')
 @login_required
 def planilhas():
     return render_template('planilhas.html')
-
 
 @app.route('/usuarios')
 @login_required
 def usuarios():
     return render_template('usuarios.html')
 
-
 @app.route('/informacoes_usuario')
 @login_required
 def informacoes_usuario():
     return render_template('informacoes_usuario.html')
 
-
 @app.route('/avaliacoes_usuario')
 @login_required
 def avaliacoes_usuario():
     return render_template('avaliacoes_usuario.html')
-
 
 @app.route('/editar_usuario')
 @login_required

@@ -32,17 +32,23 @@ def login():
             session["usuario_id"] = resposta.user.id
             session["access_token"] = resposta.session.access_token
 
+            # Busca os dados do perfil (cargo e nome) do usuário logado
+            res_usuario = supabase.table('usuario').select("nome, cargo").eq('auth_user_id', resposta.user.id).execute()
+            
+            if res_usuario.data:
+                session["usuario_nome"] = res_usuario.data[0].get("nome")
+                session["usuario_cargo"] = res_usuario.data[0].get("cargo") # ADMINISTRADOR ou PERSONAL
+            else:
+                session["usuario_nome"] = resposta.user.user_metadata.get("nome", "Usuário")
+                session["usuario_cargo"] = resposta.user.user_metadata.get("cargo", "PERSONAL")
+
             return redirect(url_for("presenca"))
 
         except Exception as erro:
             print("Erro de autenticação no Supabase:", erro)
-            return render_template(
-                "login.html",
-                erro="E-mail ou senha inválidos."
-            )
+            return render_template("login.html", erro="E-mail ou senha inválidos.")
 
     return render_template("login.html")
-
 
 @auth.route("/logout")
 def logout():
