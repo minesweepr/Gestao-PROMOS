@@ -59,31 +59,29 @@
     <article class="usuario card-retangular">
         <div class="usuario-info flx">
             <i class="fa-solid fa-circle-user"></i>
-            <h4 class="usuario-nome">Nome</h4>
+            <h4 class="usuario-nome">{{ nome }}</h4>
         </div>
         
-        <button class="btn-vermelho btn-quadrado"><i class="fa-regular fa-trash-can"></i></button>
+        <form action="" method="POST" onsubmit="return confirm('Deseja realmente excluir {{ nome }}? Essa ação será irreversível.');" >
+            <button type="submit" class="btn-vermelho btn-quadrado"><i class="fa-regular fa-trash-can"></i></button>
+        </form>
+        
     </article>
     
-    <article class="flx">
-        <p id="cpf">CPF</p>
-        <P id="usuario-cpf">1234567890</P>
-    </article>
-    
-    <article class="flx">
-        <p id="dmatricula">D. Matrícula</p>
-        <P id="usuario-dmatricula">10/10/2010</P>
-    </article>
-    
-    <article class="flx">
-        <p id="{INSERIR}">{VAR_EX}</p>
-        <P id="usuario-{INSERIR}">{VAR_USU_EX}</P>
-    </article>
+    {% for r in registro %}
+        <article class="flx">
+            <p id="{{ r.coluna }}">{{ r.label }}</p>
+            <P id="usuario-{{ r.coluna }}">{{ r.info }}</P>
+        </article>
+    {% endfor %}
+
 </section>
 
 <section class="card-branco card-largo acoes">
-    <a href=""><i class="fa-regular fa-calendar-days"></i> HISTÓRICO</a>
-    <a href="/avaliacoes_usuario"><i class="fa-regular fa-file"></i> AVALIAÇÕES</a> <!--TODO: DISPLAY NONE SE USUARIO NAO FOR ALUNO-->
-    <a href="/editar_usuario"><i class="fa-regular fa-pen-to-square"></i> EDITAR</a>
+    <a href="{{ url_for('historico_aluno', id=id) }}"><i class="fa-regular fa-calendar-days"></i> HISTÓRICO</a>
+    {% if tipo|lower=='aluno' %} 
+        <a href="{{ url_for('avaliacoes_usuario', id=id) }}"><i class="fa-regular fa-file"></i> AVALIAÇÕES</a>
+    {% endif %}
+    <a href="{{ url_for('editar_usuario', tipo=tipo, id=id) }}"><i class="fa-regular fa-pen-to-square"></i> EDITAR</a>
 </section>
 {% endblock %}

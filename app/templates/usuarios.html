@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "components/macros.html" import card_usuario %}
 
 {% block estilo %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
@@ -12,49 +13,26 @@
     <article>
         <button class="btn-preto selecionado">Aluno</button>
         <button class="btn-preto">Administrador</button>
-        <button class="btn-preto">Treinador</button>
+        <button class="btn-preto">Estagiário</button>
     </article>
 </section>
 
 <section id="usuarios">
-    <article class="card-branco usuario card-retangular">
-        <div class="usuario-info flx">
-            <i class="fa-solid fa-circle-user"></i>
-            <div>
-                <h4 class="usuario-nome">Nome</h4>
-                <p class="usuario-tipo">Tipo</p>
-            </div>
-        </div>
+    {% for u in todos_usuarios %}
+        {% call card_usuario(u.nome, u.tipo) %}
+            {% set id=u.id_aluno if u.tipo|lower=='aluno' else u.id_usuario %}
+            <nav>
+                <button data-menu="menu-{{ u.tipo }}-{{ id }}" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical usuario-mais"></i></button>
+                <ul id="menu-{{ u.tipo }}-{{ id }}" class="menu">
+                    <li><a href="{{ url_for('informacoes_usuario', tipo=u.tipo, id=id) }}"><i class="fa-regular fa-eye"></i> Checar Informações</a></li>
+                    <li><a href="{{ url_for('editar_usuario', tipo=u.tipo, id=id) }}"><i class="fa-regular fa-pen-to-square"></i> Editar Informações</a></li>
+                    <li><a href="{{ url_for('presenca', id=id) }}"><i class="fa-regular fa-calendar-check"></i> Dar Presença</a></li>
+                </ul>
+            </nav>
+        {% endcall %}
 
-        <nav>
-            <button data-menu="menu-usuario-1" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical usuario-mais"></i></button>
-            <ul id="menu-usuario-1" class="menu">
-                <li><a href="/informacoes_usuario"><i class="fa-regular fa-eye"></i> Checar Informações</a></li>
-                <li><a href="/editar_usuario"><i class="fa-regular fa-pen-to-square"></i> Editar Informações</a></li>
-                <li><a href="/presenca"><i class="fa-regular fa-calendar-check"></i> Dar Presença</a></li>
-                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
-            </ul>
-        </nav>
-    </article>
-    
-    <article class="card-branco usuario card-retangular">
-        <div class="usuario-info flx">
-            <i class="fa-solid fa-circle-user"></i>
-            <div>
-                <h4 class="usuario-nome">Nome</h4>
-                <p class="usuario-tipo">Tipo</p>
-            </div>
-        </div>
-
-        <nav>
-            <button data-menu="menu-usuario-2" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical usuario-mais"></i></button>
-            <ul id="menu-usuario-2" class="menu">
-                <li><a href=""><i class="fa-regular fa-eye"></i> Checar Informações</a></li>
-                <li><a href=""><i class="fa-regular fa-pen-to-square"></i> Editar Informações</a></li>
-                <li><a href=""><i class="fa-regular fa-calendar-check"></i> Dar Presença</a></li>
-                <li><a href=""><i class="fa-regular fa-trash-can"></i> Excluir</a></li>
-            </ul>
-        </nav>
-    </article>
+        {% else %}
+            <p class="vazio">Nenhum aluno encontrado.</p>
+    {% endfor %}
 </section>
 {% endblock %}

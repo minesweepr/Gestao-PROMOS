@@ -3,8 +3,10 @@ from flask import render_template, request, jsonify, session, redirect, url_for
 from app import app
 from app.auth import login_required
 from app.database.supabase import supabase, supabase_admin
+from app.utils.formatadores import formatar_label, montar_registro
 
-from app.model.aluno import aluno_listar_todos
+from app.model.aluno import aluno_listar_todos, aluno_listar_por_id
+from app.model.usuario import usuario_listar_todos, usuario_listar_por_id
 
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
 @login_required
@@ -119,12 +121,17 @@ def planilhas():
 @app.route('/usuarios')
 @login_required
 def usuarios():
-    return render_template('usuarios.html')
+    alunos=[{'id_aluno': a['id_aluno'], 'nome': a['nome'], 'tipo': 'Aluno'} for a in aluno_listar_todos()]
+    usuarios=[{'id_usuario': u['id_usuario'], 'nome': u['nome'], 'tipo': formatar_label(u['cargo'])} for u in usuario_listar_todos()]
 
-@app.route('/informacoes_usuario')
+    todos_usuarios=alunos+usuarios
+    return render_template('usuarios.html', todos_usuarios=todos_usuarios)
+
+@app.route('/informacoes_usuario/<string:tipo>/<int:id>')
 @login_required
-def informacoes_usuario():
-    return render_template('informacoes_usuario.html')
+def informacoes_usuario(tipo, id):
+    registro=aluno_listar_por_id(id) if tipo.lower()=='aluno' else usuario_listar_por_id(id)
+    return render_template('informacoes_usuario.html', nome=registro.get('nome'), tipo=tipo, id=id, registro=montar_registro(registro))
 
 @app.route('/avaliacoes_usuario')
 @login_required
