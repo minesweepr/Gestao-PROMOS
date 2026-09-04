@@ -1,6 +1,6 @@
 from app.model.aluno import aluno_listar_todos, aluno_listar_por_id
 from app.utils.formatadores import formatar_data_br
-from app.utils.historico_service import ( filtrar_historico, filtrar_historico_aluno )
+from app.utils.filtros_historico import ( filtrar_historico, filtrar_historico_aluno )
 
 
 def listar_historico(periodo=None, tipo="todos", pagamento="todos"):

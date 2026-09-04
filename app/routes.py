@@ -154,11 +154,18 @@ def visualizar_notificacao(id_alerta):
 @app.route('/usuarios')
 @login_required
 def usuarios():
+    tipo_usuario = request.args.get('tipo', 'todos').lower()
+    
     alunos=[{'id_aluno': a['id_aluno'], 'nome': a['nome'], 'tipo': 'Aluno'} for a in aluno_listar_todos()]
-    usuarios=[{'id_usuario': u['id_usuario'], 'nome': u['nome'], 'tipo': formatar_label(u['cargo'])} for u in usuario_listar_todos()]
+    usuarios=[ {'id_usuario': u['id_usuario'], 'nome': u['nome'], 'tipo': formatar_label(u['cargo']) } for u in usuario_listar_todos() if tipo_usuario == 'todos' or u['cargo'].lower() == tipo_usuario]
 
-    todos_usuarios=alunos+usuarios
-    return render_template('usuarios.html', todos_usuarios=todos_usuarios)
+    if tipo_usuario == 'aluno':
+        todos_usuarios = alunos
+    elif tipo_usuario in ('administrador', 'estagiario'):
+        todos_usuarios = usuarios
+    else:
+        todos_usuarios = alunos + usuarios
+    return render_template('usuarios.html', todos_usuarios=todos_usuarios, tipo_usuario=tipo_usuario)
 
 @app.route('/informacoes_usuario/<string:tipo>/<int:id>')
 @login_required

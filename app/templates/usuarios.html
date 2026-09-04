@@ -11,9 +11,9 @@
     {% include "components/barra_pesquisa.html" %}
 
     <article>
-        <button class="btn-preto selecionado">Aluno</button>
-        <button class="btn-preto">Administrador</button>
-        <button class="btn-preto">Estagiário</button>
+        <button class="btn-preto {% if tipo_usuario == 'aluno' %}selecionado{% endif %}" onclick="filtrarHistorico('tipo', 'aluno')">Aluno</button>
+        <button class="btn-preto {% if tipo_usuario == 'administrador' %}selecionado{% endif %}" onclick="filtrarHistorico('tipo', 'administrador')">Administrador</button>
+        <button class="btn-preto {% if tipo_usuario == 'estagiario' %}selecionado{% endif %}" onclick="filtrarHistorico('tipo', 'estagiario')">Estagiário</button>
     </article>
 </section>
 
@@ -35,4 +35,9 @@
             <p class="vazio">Nenhum aluno encontrado.</p>
     {% endfor %}
 </section>
+{% endblock %}
+
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/historico.js') }}"></script>
 {% endblock %}
