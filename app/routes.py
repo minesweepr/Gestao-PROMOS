@@ -7,6 +7,9 @@ from app.utils.formatadores import formatar_label, montar_registro
 
 from app.model.aluno import aluno_listar_todos, aluno_listar_por_id
 from app.model.usuario import usuario_listar_todos, usuario_listar_por_id
+from app.model.historico import listar_historico, listar_historico_aluno
+from app.model.alerta import contar_nao_lidas, listar_alertas, visualizar_alerta
+from app.model.arquivo import excluir_avaliacao, listar_avaliacoes
 
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
 @login_required
@@ -101,22 +104,52 @@ def presenca():
 @app.route('/historico_geral')
 @login_required
 def historico_geral():
-    return render_template('historico_geral.html')
+    periodo = request.args.get('periodo', 'mes')
+    tipo = request.args.get('tipo', 'todos')
+    pagamento = request.args.get('pagamento', 'todos')
 
-@app.route('/historico_aluno')
+    historico = listar_historico(periodo, tipo, pagamento)
+
+    return render_template(
+        'historico_geral.html',
+        historico=historico,
+        periodo=periodo,
+        tipo=tipo,
+        pagamento=pagamento
+    )
+
+@app.route('/historico_aluno/<int:id_aluno>')
 @login_required
-def historico_aluno():
-    return render_template('historico_aluno.html')
+def historico_aluno(id_aluno):
+    periodo = request.args.get('periodo', 'mes')
+    tipo = request.args.get('tipo', 'todos')
+    pagamento = request.args.get('pagamento', 'todos')
+    data_aluno = listar_historico_aluno( id_aluno, periodo, tipo, pagamento )
+    return render_template(
+        'historico_aluno.html',
+        data_aluno=data_aluno,
+        periodo=periodo,
+        tipo=tipo,
+        pagamento=pagamento
+    )
 
 @app.route('/notificacoes')
 @login_required
 def notificacoes():
-    return render_template('notificacoes.html')
+    alertas = listar_alertas()
+    nao_lidas = contar_nao_lidas()
 
-@app.route('/planilhas')
+    return render_template(
+        'notificacoes.html',
+        alertas=alertas,
+        nao_lidas=nao_lidas
+    )
+
+@app.route('/notificacoes/<int:id_alerta>/visualizar', methods=['PATCH'])
 @login_required
-def planilhas():
-    return render_template('planilhas.html')
+def visualizar_notificacao(id_alerta):
+    visualizar_alerta(id_alerta)
+    return '', 204
 
 @app.route('/usuarios')
 @login_required
@@ -136,7 +169,15 @@ def informacoes_usuario(tipo, id):
 @app.route('/avaliacoes_usuario')
 @login_required
 def avaliacoes_usuario():
-    return render_template('avaliacoes_usuario.html')
+    avaliacoes = listar_avaliacoes()
+    return render_template('avaliacoes_usuario.html',avaliacoes=avaliacoes)
+
+@app.route('/avaliacoes_usuario/excluir/<int:id_avaliacao>', methods=['POST'])
+@login_required
+def excluir_avaliacao_rota(id_avaliacao):
+    excluir_avaliacao(id_avaliacao)
+
+    return redirect(url_for('avaliacoes_usuario'))
 
 @app.route('/editar_usuario')
 @login_required

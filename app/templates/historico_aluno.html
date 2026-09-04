@@ -12,27 +12,25 @@
 </section>
 
 <section class="titulo-h2 flx">
-    <h2>Histórico de <span id="nome-aluno">nome da pessoa</span></h2>
+    <h2>Histórico de <span id="nome-aluno">{{ data_aluno.aluno.nome }}</span></h2>
 </section>
 
 <section id="dados">
-    <p>Última presença: 15/08/2026</p>
-    <p>Saldo devedor: R$ 60,00</p>
+    <p>Última presença: {{ data_aluno.ultima_presenca }}</p>
+    <p>Saldo devedor: R$ {{ "%.2f"|format(data_aluno.saldo_devedor)|replace(".", ",") }}</p>
     
+    {% for registro in data_aluno.historico %}
     <article class="card-branco hist-geral">
-        <h3>15/06/2026</h3>
+        <h3>{{ registro.data }}</h3>
             <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
+                {% if registro.presente %}<p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>{% endif %}
+                {% if registro.pagamento is not none %} <p> <i class="fa-solid fa-circle" style="color: var(--accent);"> </i> Pagamento R${{ "%.2f"|format(registro.pagamento.valor)|replace(".", ",") }} ({{ registro.pagamento.status }}) </p> {% endif %}
             </div>
     </article>
-    <article class="card-branco hist-geral">
-        <h3>14/06/2026</h3>
-            <div class="hist-info">
-                <p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>
-                <p><i class="fa-solid fa-circle" style="color: var(--accent);"></i>Pagamento R$30,00 (Pendente)</p>
-            </div>
-    </article>
-    
+    {% endfor %}
 </section>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/historico.js') }}"></script>
 {% endblock %}
