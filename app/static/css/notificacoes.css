@@ -37,6 +37,7 @@ header h1, .notificacao-titulo {
 }
 .notificacao-titulo {
     margin-bottom: 4px;
+    min-width: 175px;
 }
 .notificacao-desc {
     font-weight: 500;
@@ -69,19 +70,32 @@ header h1, .notificacao-titulo {
     opacity: 0;
     visibility: hidden;
 }
+@media (max-width: 470px){
+    .fa-exclamation {
+        width: 31px;
+    }
+}
 @media (min-width: 700px){
+    header {
+        padding: 1.234em 3em;
+    }
+     article.notificacao {
+        justify-content: center;
+     }
     article.notificacao,
     article div > div {
         display: flex;
         align-items: center;
+        width: 100%;
+    }
+    article div > div {
         gap: 26px;
     }
     .notif-content {
         gap: 26px;
-    }
-
-    article.notificacao {
-        justify-content: center;
+        justify-content: space-around;
+        width: 100%;
+        max-width: 880px;
     }
     .notificacao-titulo{
         margin-bottom:0;
@@ -91,5 +105,8 @@ header h1, .notificacao-titulo {
     }
     .notificacao-alerta {
         position: static;
+    }
+    .fa-chevron-left {
+        width: 64px;
     }
 }

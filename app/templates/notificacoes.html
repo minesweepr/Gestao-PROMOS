@@ -20,45 +20,52 @@
     <div class="center-flx">
         <i class="fa-regular fa-bell"></i>
         <h1>Notificações</h1>
-        <p class="accent-notif"><span>2</span> não lidas</p> <!--TODO Tornar dinamico com backend qtd de mensagens n lidas-->
+        <p class="accent-notif">{{ nao_lidas }} não lidas</p> 
     </div>
-
     <div></div>
-
 </header>
 <main>
-    {% block conteudo %} <!--TODO Tornar dinamico com backend, nome, dias e quantidade de mensagens n lidas-->
-    <article class="card-largo notificacao"> 
+    {% block conteudo %}
+    {% for alerta in alertas %}
+    <article class="card-largo notificacao" data-id="{{ alerta.id_alerta }}"> 
         <div class="center-flx notif-content">
             <i class="fa-solid fa-exclamation"></i>
 
             <div>
-                <p class="notificacao-titulo">Ausência</p>
-                <p class="notificacao-desc">
-                    <span class="unread">Nome</span> está há <span class="unread">10 dias</span> sem comparecer à academia.
-                </p>
+                <p class="notificacao-titulo {% if alerta.status == 'PENDENTE' %}unread{% endif %}">{{ alerta.tipo_alerta }}</p>
+                <p class="notificacao-desc">{{ alerta.descricao }}</p>
             </div>
-            <span class="notificacao-alerta accent-notif"></span>
+            <span class="notificacao-alerta accent-notif {% if alerta.status != 'PENDENTE' %}display-notif{% endif %}"></span>
         </div>
     </article>
-
-     <article class="card-largo notificacao"> 
-        <div class="center-flx notif-content">
-            <i class="fa-solid fa-exclamation"></i>
-
-            <div>
-                <p class="notificacao-titulo">Ausência</p>
-                <p class="notificacao-desc">
-                    <span>Nome</span> está há <span>10 dias</span> sem comparecer à academia.
-                </p>
-            </div>
-            <span class="notificacao-alerta accent-notif display-notif"></span>
-        </div>
-    </article>
-
+    {% endfor %}
     {% endblock %}
 </main>
 
+<script>
+document.querySelectorAll('.notificacao').forEach(card => {
 
+    card.addEventListener('click', async () => {
+
+        const indicador = card.querySelector('.notificacao-alerta');
+
+        if (indicador.classList.contains('display-notif')) {
+            return;
+        }
+
+        indicador.classList.add('display-notif');
+
+        try {
+            await fetch(
+                `/notificacoes/${card.dataset.id}/visualizar`,
+                { method: 'PATCH' }
+            );
+        } catch (erro) {
+            indicador.classList.remove('display-notif');
+        }
+    });
+
+});
+</script>
 </body>
 </html>
