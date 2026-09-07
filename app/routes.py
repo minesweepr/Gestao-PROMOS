@@ -10,6 +10,7 @@ from app.model.usuario import usuario_listar_todos, usuario_listar_por_id
 from app.model.historico import listar_historico, listar_historico_aluno
 from app.model.alerta import contar_nao_lidas, listar_alertas, visualizar_alerta
 from app.model.arquivo import excluir_avaliacao, listar_avaliacoes
+from app.model.presenca import listar_presencas_hoje, presenca_aluno_marcar, presenca_aluno_desmarcar
 
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
 @login_required
@@ -99,7 +100,24 @@ def cadastrar_usuario():
 @login_required
 def presenca():
     alunos=[{'id_aluno': a['id_aluno'], 'nome': a['nome']} for a in aluno_listar_todos('ATIVO')]
+    ids_presenca={p['id_aluno'] for p in listar_presencas_hoje()}
+
+    for aluno in alunos:
+        aluno['presente']=aluno['id_aluno'] in ids_presenca
+
     return render_template('presenca.html', alunos=alunos)
+
+@app.route('/presenca/marcar/<int:id_aluno>', methods=['POST'])
+@login_required
+def presenca_marcar(id_aluno):
+    presenca_aluno_marcar(id_aluno=id_aluno, id_usuario=session.get("id_usuario"))
+    return redirect(url_for('presenca'))
+
+@app.route('/presenca/desmarcar/<int:id_aluno>', methods=['POST'])
+@login_required
+def presenca_desmarcar(id_aluno):
+    presenca_aluno_desmarcar(id_aluno)
+    return redirect(url_for('presenca'))
 
 @app.route('/historico_geral')
 @login_required

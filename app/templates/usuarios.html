@@ -26,13 +26,12 @@
                 <ul id="menu-{{ u.tipo }}-{{ id }}" class="menu">
                     <li><a href="{{ url_for('informacoes_usuario', tipo=u.tipo, id=id) }}"><i class="fa-regular fa-eye"></i> Checar Informações</a></li>
                     <li><a href="{{ url_for('editar_usuario', tipo=u.tipo, id=id) }}"><i class="fa-regular fa-pen-to-square"></i> Editar Informações</a></li>
-                    <li><a href="{{ url_for('presenca', id=id) }}"><i class="fa-regular fa-calendar-check"></i> Dar Presença</a></li>
                 </ul>
             </nav>
         {% endcall %}
 
         {% else %}
-            <p class="vazio">Nenhum aluno encontrado.</p>
+            <p class="vazio">Nenhum usuário encontrado.</p>
     {% endfor %}
 </section>
 {% endblock %}

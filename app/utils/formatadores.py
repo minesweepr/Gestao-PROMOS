@@ -5,6 +5,7 @@ LABELS_ESPECIAIS={
     'INADIMPLENCIA': 'Inadimplência',
     'AUSENCIA': 'Ausência',
     'DISPONIVEL': 'Disponível',
+    'ESTAGIARIO': 'Estagiário',
     'cpf': 'CPF',
     'data_nascimento': 'D. Nascimento',
     'data_entrada': 'D. Matrícula',

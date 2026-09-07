@@ -33,9 +33,10 @@ def login():
             session["access_token"] = resposta.session.access_token
 
             # Busca os dados do perfil (cargo e nome) do usuário logado
-            res_usuario = supabase.table('usuario').select("nome, cargo").eq('auth_user_id', resposta.user.id).execute()
+            res_usuario = supabase.table('usuario').select("id_usuario","nome, cargo").eq('auth_user_id', resposta.user.id).execute()
             
             if res_usuario.data:
+                session["id_usuario"] = res_usuario.data[0].get("id_usuario")
                 session["usuario_nome"] = res_usuario.data[0].get("nome")
                 session["usuario_cargo"] = res_usuario.data[0].get("cargo") # ADMINISTRADOR ou PERSONAL
             else:

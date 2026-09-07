@@ -62,10 +62,6 @@
             <h4 class="usuario-nome">{{ nome }}</h4>
         </div>
         
-        <form action="" method="POST" onsubmit="return confirm('Deseja realmente excluir {{ nome }}? Essa ação será irreversível.');" >
-            <button type="submit" class="btn-vermelho btn-quadrado"><i class="fa-regular fa-trash-can"></i></button>
-        </form>
-        
     </article>
     
     {% for r in registro %}
@@ -78,8 +74,8 @@
 </section>
 
 <section class="card-branco card-largo acoes">
-    <a href="{{ url_for('historico_aluno', id=id) }}"><i class="fa-regular fa-calendar-days"></i> HISTÓRICO</a>
     {% if tipo|lower=='aluno' %} 
+        <a href="{{ url_for('historico_aluno', id_aluno=id) }}"><i class="fa-regular fa-calendar-days"></i> HISTÓRICO</a>
         <a href="{{ url_for('avaliacoes_usuario', id=id) }}"><i class="fa-regular fa-file"></i> AVALIAÇÕES</a>
     {% endif %}
     <a href="{{ url_for('editar_usuario', tipo=tipo, id=id) }}"><i class="fa-regular fa-pen-to-square"></i> EDITAR</a>

@@ -13,11 +13,49 @@
 
 <section id="usuarios">
     {% for a in alunos %}
+    {% set chamada=["presenca_desmarcar", "vermelho", "P"] if a.presente else ["presenca_marcar", "preto", "A"] %}
         {% call card_usuario(a.nome) %}
-            <button class="btn-preto btn-quadrado">A</button> <!--TODO: tornar funcional-->
+            <form class="form-presenca" method="POST" action="{{ url_for(chamada[0], id_aluno=a.id_aluno) }}">
+                <button type="submit" class="btn-{{ chamada[1] }} btn-quadrado">{{ chamada[2] }}</button>
+            </form>
         {% endcall %}
         {% else %}
             <p class="vazio">Nenhum aluno encontrado.</p>
     {% endfor %}
 </section>
+{% endblock %}
+
+{% block js %}
+<script>
+    document.querySelectorAll(".form-presenca").forEach(form =>{
+        form.addEventListener("submit", async (e) =>{
+            e.preventDefault();
+            const btn=form.querySelector("button");
+
+            function alterarEstado(){
+                const estaPresente=btn.classList.contains("btn-vermelho");
+                if(estaPresente){
+                    btn.textContent="A";
+                    btn.classList.replace("btn-vermelho", "btn-preto");
+                    form.action=form.action.replace("/marcar/", "/desmarcar/");
+                }else{
+                    btn.textContent="P";
+                    btn.classList.replace("btn-preto", "btn-vermelho");
+                    form.action=form.action.replace("/desmarcar/", "/marcar/");
+                }
+            }
+            // garante uma resposta mais rápida pro usuário
+            alterarEstado()
+
+            try{
+                const resposta=await fetch(form.action, {method: "POST"});
+                if(!resposta.ok) throw new Error (`Response status: ${resposta.status}`);
+            }catch(error){
+                console.error(error.message);
+                // reverte a resposta caso não funcione
+                alterarEstado()
+            }
+        });
+    });
+</script>
 {% endblock %}
