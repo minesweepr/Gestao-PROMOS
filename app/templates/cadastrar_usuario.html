@@ -24,7 +24,7 @@
         <select name="perfil" id="cargo" onchange="alternarCampos()" required>
             <option value="" disabled selected>Selecione o Cargo ou Perfil</option>
             <option value="ADMINISTRADOR">Administrador (Usuário)</option>
-            <option value="PERSONAL">Estagiário / Personal (Usuário)</option>
+            <option value="ESTAGIARIO">Estagiário (Usuário)</option>
             <option value="ALUNO">Aluno</option>
         </select>
     </section>
@@ -87,7 +87,7 @@ function alternarCampos() {
 
     if (valorSelecionado === 'ALUNO') {
         infoAluno.style.display = 'block';
-    } else if (valorSelecionado === 'ADMINISTRADOR' || valorSelecionado === 'PERSONAL') {
+    } else if (valorSelecionado === 'ADMINISTRADOR' || valorSelecionado === 'ESTAGIARIO') {
         infoFuncionario.style.display = 'block';
     }
 }

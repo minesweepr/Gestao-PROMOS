@@ -38,10 +38,10 @@ def login():
             if res_usuario.data:
                 session["id_usuario"] = res_usuario.data[0].get("id_usuario")
                 session["usuario_nome"] = res_usuario.data[0].get("nome")
-                session["usuario_cargo"] = res_usuario.data[0].get("cargo") # ADMINISTRADOR ou PERSONAL
+                session["usuario_cargo"] = res_usuario.data[0].get("cargo") # ADMINISTRADOR ou ESTAGIARIO
             else:
                 session["usuario_nome"] = resposta.user.user_metadata.get("nome", "Usuário")
-                session["usuario_cargo"] = resposta.user.user_metadata.get("cargo", "PERSONAL")
+                session["usuario_cargo"] = resposta.user.user_metadata.get("cargo", "ESTAGIARIO")
 
             return redirect(url_for("presenca"))
 

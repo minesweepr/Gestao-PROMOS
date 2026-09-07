@@ -14,7 +14,7 @@ def inject_user():
             "nome": session.get("usuario_nome"),
             "cargo": session.get("usuario_cargo"),
             "is_admin": session.get("usuario_cargo") == "ADMINISTRADOR",
-            "is_personal": session.get("usuario_cargo") in ["ADMINISTRADOR", "PERSONAL"]
+            "is_estagiario": session.get("usuario_cargo") in ["ADMINISTRADOR", "ESTAGIARIO"]
         }
     }
 

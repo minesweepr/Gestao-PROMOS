@@ -30,8 +30,8 @@ def cadastrar_usuario():
             return jsonify({"sucesso": False, "mensagem": "O CPF deve conter exatamente 11 números."}), 400
 
         try:
-            # 1. CADASTRO DE USUÁRIO DO SISTEMA (ADMINISTRADOR / PERSONAL)
-            if perfil in ['ADMINISTRADOR', 'PERSONAL']:
+            # 1. CADASTRO DE USUÁRIO DO SISTEMA (ADMINISTRADOR / ESTAGIARIO)
+            if perfil in ['ADMINISTRADOR', 'ESTAGIARIO']:
                 email = request.form.get('email')
                 senha = request.form.get('senha')
 
