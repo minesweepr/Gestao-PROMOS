@@ -25,6 +25,18 @@ def formatar_data_br(data):
         return None
     return datetime.strptime( data[:10], "%Y-%m-%d" ).strftime("%d/%m/%Y")
 
+## formatar cpf
+def formatar_cpf(cpf):
+    if not cpf:
+        return None
+    return f'{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
+
+## formatar telefone
+def formatar_telefone(telefone):
+    if not telefone:
+        return None
+    return f'+55 ({telefone[:2]}) {telefone[2:7]}-{telefone[7:]}'
+
 ## converte o dict em uma lista formatada
 def montar_registro(dicionario):
     registro=[]
@@ -34,9 +46,13 @@ def montar_registro(dicionario):
         if label is None or info is None:
             continue
 
-        if 'data' in coluna.lower() or coluna.endswith('_em'):
+        if coluna=='cpf':
+            info=formatar_cpf(info)
+        elif coluna=='telefone':
+            info=formatar_telefone(info)
+        elif 'data' in coluna.lower() or coluna.endswith('_em'):
             info=formatar_data_br(info)
-        elif isinstance(info, str):
+        elif isinstance(info, str) and '@' not in info:
             info=formatar_label(info)
 
         registro.append({'coluna': coluna, 'label': label, 'info': info})
