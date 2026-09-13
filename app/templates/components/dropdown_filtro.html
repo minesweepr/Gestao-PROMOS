@@ -1,19 +1,19 @@
 <article class="filtro-art input-flex">
 
     <section>
-        <button data-menu="menu-filter-periodo" class="menu-dropdown btn-preto {% if periodo != 'mes' %}selecionado{% endif %}">
+        <button data-menu="menu-filter-periodo" class="menu-dropdown btn-preto {% if periodo is not none %}selecionado{% endif %}">
             Período <i class="fa-solid fa-chevron-down"></i>
         </button>
     </section>
 
     <section>
-        <button data-menu="menu-filter-tipo" class="menu-dropdown btn-preto {% if tipo != 'todos' %}selecionado{% endif %}">
+        <button data-menu="menu-filter-tipo" class="menu-dropdown btn-preto {% if tipo is not none %}selecionado{% endif %}">
             Tipo <i class="fa-solid fa-chevron-down"></i>
         </button>
     </section>
 
     <section>
-        <button data-menu="menu-filter-pagamento" class="menu-dropdown btn-preto {% if pagamento != 'todos' and tipo != 'presencas' %}selecionado{% endif %}">
+        <button data-menu="menu-filter-pagamento" class="menu-dropdown btn-preto {% if pagamento is not none and tipo != 'presencas' %}selecionado{% endif %}">
             Pagamento <i class="fa-solid fa-chevron-down"></i>
         </button>
     </section>
@@ -35,7 +35,6 @@
 <nav id="menu-filter-tipo" class="menu">
     <p>Tipo de Registro</p>
     <ul>
-        <button class="btn-preto {% if tipo == 'todos' %}selecionado{% endif %}" onclick="filtrarHistorico('tipo', 'todos')">Todos</button>
         <button class="btn-preto {% if tipo == 'presencas' %}selecionado{% endif %}" onclick="filtrarHistorico('tipo', 'presencas')">Apenas Presenças</button>
         <button class="btn-preto {% if tipo == 'pagamentos' %}selecionado{% endif %}" onclick="filtrarHistorico('tipo', 'pagamentos')">Apenas Pagamentos</button>
     </ul>
@@ -45,8 +44,7 @@
 <nav id="menu-filter-pagamento" class="menu">
     <p>Pagamento</p>
     <ul>
-        <button class="btn-preto {% if pagamento == 'todos' %}selecionado{% endif %}" onclick="filtrarHistorico('pagamento', 'todos')">Todos</button>
         <button class="btn-preto {% if pagamento == 'pago' %}selecionado{% endif %}" onclick="filtrarHistorico('pagamento', 'pago')">Pagos</button>
-        <button class="btn-preto {% if pagamento == 'pendente' %}selecionado{% endif %}" onclick="filtrarHistorico('pagamento', 'pendente')">Pendentes</button>
+        <button class="btn-preto {% if pagamento == 'cancelado' %}selecionado{% endif %}" onclick="filtrarHistorico('pagamento', 'cancelado')">Cancelados</button>
     </ul>
 </nav>

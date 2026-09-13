@@ -17,6 +17,19 @@ def listar_presencas_por_periodo(inicio=None, fim=None, id_aluno=None):
 
     return consulta.execute().data or []
 
+def listar_ultima_presenca(id_aluno):
+    resposta = (
+        supabase
+        .table("presenca")
+        .select("data_presenca")
+        .eq("id_aluno", id_aluno)
+        .order("data_presenca", desc=True)
+        .limit(1)
+        .execute()
+    )
+
+    return resposta.data[0] if resposta.data else None
+
 def listar_presencas_hoje():
     inicio, fim=_dia_min_max()
     resposta=(

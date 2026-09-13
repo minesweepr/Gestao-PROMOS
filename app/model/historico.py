@@ -1,9 +1,10 @@
 from app.model.aluno import aluno_listar_todos, aluno_listar_por_id
+from app.model.pagamento import listar_pagamentos_aluno
+from app.model.presenca import listar_ultima_presenca
 from app.utils.formatadores import formatar_data_br
-from app.utils.filtros_historico import ( filtrar_historico, filtrar_historico_aluno )
+from app.utils.filtros_historico import filtrar_historico
 
-
-def listar_historico(periodo=None, tipo="todos", pagamento="todos"):
+def listar_historico(periodo=None, tipo=None, pagamento=None):
     presencas, pagamentos = filtrar_historico( periodo, tipo, pagamento )
     alunos = {a["id_aluno"]: a["nome"] for a in aluno_listar_todos("ATIVO")}
     historico = {}
@@ -40,25 +41,27 @@ def listar_historico(periodo=None, tipo="todos", pagamento="todos"):
             historico[data][id_aluno] = item
 
     return [
-        { "data": formatar_data_br(data), "alunos": ( list(registros.values()) if tipo == "todos" else registros ), }
-        for data, registros in sorted( historico.items(), reverse=True )
-    ]
+        { "data": formatar_data_br(data), "alunos": list(registros.values()) if tipo is None else registros, }
+        for data, registros in sorted(historico.items(), reverse=True)
+    ]   
 
-def listar_historico_aluno( id_aluno, periodo=None, tipo="todos", pagamento="todos" ):
-    presencas, pagamentos = filtrar_historico_aluno( id_aluno, periodo, tipo, pagamento )
+def listar_historico_aluno(id_aluno, periodo=None, tipo=None, pagamento=None):
+    presencas, pagamentos = filtrar_historico( periodo=periodo, tipo=tipo, pagamento=pagamento, id_aluno=id_aluno )
     aluno = aluno_listar_por_id(id_aluno)
+    ultima_presenca = listar_ultima_presenca(id_aluno)
+    pagamentos_aluno = listar_pagamentos_aluno(id_aluno)
     datas = {}
     for p in presencas:
         data = p["data_presenca"][:10]
-        datas.setdefault( data, {"presente": False, "pagamento": None} )
+        datas.setdefault(data, {"presente": False, "pagamento": None})
         datas[data]["presente"] = True
     for p in pagamentos:
         data = p["data_pagamento"][:10]
-        datas.setdefault( data, {"presente": False, "pagamento": None} )
-        datas[data]["pagamento"] = { "valor": p["valor"], "status": p["status"], }
+        datas.setdefault(data, {"presente": False, "pagamento": None})
+        datas[data]["pagamento"] = { "valor": p["valor"], "status": p["status"] }
     return {
         "aluno": aluno,
-        "historico": [ { "data": formatar_data_br(data), **info } for data, info in sorted( datas.items(), reverse=True ) ],
-        "ultima_presenca": ( formatar_data_br(presencas[0]["data_presenca"]) if presencas else None ),
-        "saldo_devedor": sum( p["valor"] for p in pagamentos if p["status"] == "PENDENTE" ),
+        "historico": [ { "data": formatar_data_br(data), **info } for data, info in sorted(datas.items(), reverse=True) ],
+        "ultima_presenca": ( formatar_data_br(ultima_presenca["data_presenca"]) if ultima_presenca else None ),
+        "saldo_devedor": sum( p["valor"] for p in pagamentos_aluno if p["status"] == "CANCELADO" )
     }

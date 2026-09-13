@@ -17,3 +17,13 @@ def listar_pagamentos(inicio=None, fim=None, status=None, id_aluno=None):
         consulta = consulta.eq("id_aluno", id_aluno)
 
     return consulta.execute().data or []
+
+def listar_pagamentos_aluno(id_aluno):
+    resposta = (
+        supabase
+        .table("pagamento")
+        .select("valor, status")
+        .eq("id_aluno", id_aluno)
+        .execute()
+    )
+    return resposta.data or []

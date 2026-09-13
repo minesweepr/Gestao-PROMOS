@@ -16,16 +16,10 @@ def obter_periodo(periodo):
     return inicio, hoje + timedelta(days=1)
 
 def _status(pagamento):
-    return { "pago": "PAGO", "pendente": "PENDENTE", }.get(pagamento)
+    return {"pago": "PAGO", "cancelado": "CANCELADO"}.get(pagamento)
 
-def filtrar_historico(periodo=None, tipo="todos", pagamento="todos"):
+def filtrar_historico(periodo=None, tipo=None, pagamento=None, id_aluno=None):
     inicio, fim = obter_periodo(periodo)
-    presencas = ( listar_presencas_por_periodo(inicio, fim) if tipo in ("todos", "presencas") else [] )
-    pagamentos = ( listar_pagamentos(inicio, fim, _status(pagamento)) if tipo in ("todos", "pagamentos") else [] )
-    return presencas, pagamentos
-
-def filtrar_historico_aluno( id_aluno, periodo=None, tipo="todos", pagamento="todos" ):
-    inicio, fim = obter_periodo(periodo)
-    presencas = ( listar_presencas_por_periodo(inicio, fim, id_aluno) if tipo in ("todos", "presencas") else [] )
-    pagamentos = ( listar_pagamentos(inicio, fim, _status(pagamento), id_aluno) if tipo in ("todos", "pagamentos") else [] )
+    presencas = (listar_presencas_por_periodo(inicio, fim, id_aluno) if tipo in (None, "presencas") else [])
+    pagamentos = (listar_pagamentos(inicio, fim, _status(pagamento), id_aluno) if tipo in (None, "pagamentos") else [])
     return presencas, pagamentos

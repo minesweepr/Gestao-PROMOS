@@ -16,19 +16,24 @@
 </section>
 
 <section id="dados">
-    <p>Última presença: {{ data_aluno.ultima_presenca }}</p>
-    <p>Saldo devedor: R$ {{ "%.2f"|format(data_aluno.saldo_devedor)|replace(".", ",") }}</p>
-    
-    {% for registro in data_aluno.historico %}
-    <article class="card-branco hist-geral">
-        <h3>{{ registro.data }}</h3>
-            <div class="hist-info">
-                {% if registro.presente %}<p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>{% endif %}
-                {% if registro.pagamento is not none %} <p> <i class="fa-solid fa-circle" style="color: var(--accent);"> </i> Pagamento R${{ "%.2f"|format(registro.pagamento.valor)|replace(".", ",") }} ({{ registro.pagamento.status }}) </p> {% endif %}
-            </div>
-    </article>
-    {% endfor %}
+    <p>Última presença: {{ data_aluno.ultima_presenca or "Nenhuma presença registrada" }}</p>
+    <p>Saldo devedor: R$ {{ "%.2f"|format(data_aluno.saldo_devedor or 0)|replace(".", ",") }}</p>
+
+    {% if data_aluno.historico %}
+        {% for registro in data_aluno.historico %}
+        <article class="card-branco hist-geral">
+            <h3>{{ registro.data }}</h3>
+                <div class="hist-info">
+                    {% if registro.presente %}<p><i class="fa-solid fa-circle" style="color: #00D335;"></i>Presença</p>{% endif %}
+                    {% if registro.pagamento is not none %} <p> <i class="fa-solid fa-circle" style="color: var(--accent);"> </i> Pagamento R${{ "%.2f"|format(registro.pagamento.valor)|replace(".", ",") }} ({{ registro.pagamento.status }}) </p> {% endif %}
+                </div>
+        </article>
+        {% endfor %}
+    {% else %}
+        <p class="vazio">Nenhum registro encontrado.</p>
+    {% endif %}
 </section>
+
 {% endblock %}
 
 {% block js %}

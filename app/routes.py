@@ -123,8 +123,8 @@ def presenca_desmarcar(id_aluno):
 @login_required
 def historico_geral():
     periodo = request.args.get('periodo', 'mes')
-    tipo = request.args.get('tipo', 'todos')
-    pagamento = request.args.get('pagamento', 'todos')
+    tipo = request.args.get('tipo')
+    pagamento = request.args.get("pagamento")
 
     historico = listar_historico(periodo, tipo, pagamento)
 
@@ -140,9 +140,9 @@ def historico_geral():
 @login_required
 def historico_aluno(id_aluno):
     periodo = request.args.get('periodo', 'mes')
-    tipo = request.args.get('tipo', 'todos')
-    pagamento = request.args.get('pagamento', 'todos')
-    data_aluno = listar_historico_aluno( id_aluno, periodo, tipo, pagamento )
+    tipo = request.args.get('tipo')
+    pagamento = request.args.get("pagamento")
+    data_aluno = listar_historico_aluno(id_aluno, periodo, tipo, pagamento)
     return render_template(
         'historico_aluno.html',
         data_aluno=data_aluno,
