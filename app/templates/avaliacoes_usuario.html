@@ -1,43 +1,75 @@
 {% extends "base.html" %}
 
 {% block estilo %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/card_retangular.css') }}">
+<style>
+    #import-form {
+        max-width: 140px;
+    }
+    #import-form button {
+        width: inherit;
+    }
+    #excluirAvaliacao {
+        text-align: left;
+    }
+    .card-retangular {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+    .arquivo-info {
+        min-width: 0;
+        max-width: 93%;
+        overflow: hidden;
+    }
+    .arquivo-info > div {
+        min-width: 0;
+        overflow: hidden;
+    }
+    .arquivo-nome {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 {% endblock %}
 
 {% block conteudo %}
 <section class="flx">
     <h2>Avaliações</h2>
-    <button class="btn-vermelho">Importar <i class="fa-solid fa-download"></i></button>
+    <form id="import-form" action="{{ url_for('importar_avaliacao_rota', id_aluno=id_aluno) }}" method="POST" enctype="multipart/form-data">
+        <input type="file" id="arquivo" name="arquivo" accept=".pdf,application/pdf" hidden required >
+        <button type="button" class="btn-vermelho" onclick="document.getElementById('arquivo').click()" > Importar <i class="fa-solid fa-download"></i> </button>
+    </form>
 </section>
 
-<!--TODO: fazer importar, talvez exportar funcionar-->
 <section id="arquivos">
     {% for avaliacao in avaliacoes %}
     <article class="card-branco arquivo card-retangular">
         <div class="arquivo-info flx">
-            <i class="fa-solid fa-table-list"></i>
-            <div>
-                <h4 class="arquivo-nome">{{ avaliacao.nome }}</h4>
-            </div>
+            <i class="fa-solid fa-file-pdf"></i>
+            <div> <h4 class="arquivo-nome">{{ avaliacao.nome_arquivo }}</h4> </div>
         </div>
-
         <nav>
-            <button data-menu="menu-arquivo-{{ avaliacao.id_avaliacao }}" class="menu-dropdown"><i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i></button>
-            <ul id="menu-arquivo-{{ avaliacao.id_avaliacao }}" class="menu">
-                <li><a href="/avaliacoes/{{ avaliacao.id_avaliacao }}"><i class="fa-regular fa-eye"></i> Visualizar</a></li>
-                <li><a href="/avaliacoes/exportar/{{ avaliacao.id_avaliacao }}"><i class="fa-solid fa-upload"></i> Exportar</a></li>
+            <button data-menu="menu-arquivo-{{ avaliacao.id_avaliacao }}" class="menu-dropdown"> <i class="fa-solid fa-ellipsis-vertical arquivo-mais"></i> </button>
+            <ul id="menu-arquivo-{{ avaliacao.id_avaliacao }}" class="menu" >
+                <li> <a href="{{ url_for('visualizar_avaliacao', id_avaliacao=avaliacao.id_avaliacao) }}" target="_blank"> <i class="fa-regular fa-eye"></i> Visualizar/Exportar </a> </li>
+                <!-- <li> <a href=""> <i class="fa-solid fa-upload"></i> Exportar </a> </li> -->
                 <li>
-                    <form action="/avaliacoes/excluir/{{ avaliacao.id_avaliacao }}" method="POST" onsubmit="return confirm('Deseja realmente excluir esta avaliação?');" >
-                        <button type="submit">
-                            <i class="fa-regular fa-trash-can"></i>
-                            Excluir
+                    <form method="POST" action="{{ url_for('excluir_avaliacao_rota', id_avaliacao=avaliacao.id_avaliacao, id_aluno=id_aluno) }}" onsubmit="return confirm('Deseja realmente excluir esta avaliação?');" >
+                        <button type="submit"id="excluirAvaliacao">         
+                            <i class="fa-regular fa-trash-can"></i> Excluir
                         </button>
                     </form>
+                    
                 </li>
             </ul>
         </nav>
     </article>
     {% endfor %}
 </section>
+<script>
+    document.getElementById('arquivo').addEventListener('change', function () { if (this.files.length) { this.form.submit(); } });
+</script>
 
 {% endblock %}

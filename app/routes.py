@@ -1,5 +1,6 @@
 from datetime import date
-from flask import render_template, request, jsonify, session, redirect, url_for
+from io import BytesIO
+from flask import render_template, request, jsonify, session, redirect, url_for, send_file
 from app import app
 from app.auth import login_required
 from app.database.supabase import supabase, supabase_admin
@@ -9,7 +10,7 @@ from app.model.aluno import aluno_listar_todos, aluno_listar_por_id
 from app.model.usuario import usuario_listar_todos, usuario_listar_por_id
 from app.model.historico import listar_historico, listar_historico_aluno
 from app.model.alerta import contar_nao_lidas, listar_alertas, visualizar_alerta
-from app.model.arquivo import excluir_avaliacao, listar_avaliacoes
+from app.model.arquivo import excluir_avaliacao, importar_avaliacao, listar_avaliacoes, obter_avaliacao_pdf
 from app.model.presenca import listar_presencas_hoje, presenca_aluno_marcar, presenca_aluno_desmarcar
 
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
@@ -191,18 +192,35 @@ def informacoes_usuario(tipo, id):
     registro=aluno_listar_por_id(id) if tipo.lower()=='aluno' else usuario_listar_por_id(id)
     return render_template('informacoes_usuario.html', nome=registro.get('nome'), tipo=tipo, id=id, registro=montar_registro(registro))
 
-@app.route('/avaliacoes_usuario')
+@app.route('/avaliacoes_usuario/<int:id_aluno>')
 @login_required
-def avaliacoes_usuario():
-    avaliacoes = listar_avaliacoes()
-    return render_template('avaliacoes_usuario.html',avaliacoes=avaliacoes)
+def avaliacoes_usuario(id_aluno):
+    avaliacoes = listar_avaliacoes(id_aluno)
+    return render_template( 'avaliacoes_usuario.html', avaliacoes=avaliacoes, id_aluno=id_aluno )
 
-@app.route('/avaliacoes_usuario/excluir/<int:id_avaliacao>', methods=['POST'])
+@app.route('/avaliacoes_usuario/<int:id_aluno>/importar', methods=['POST'])
 @login_required
-def excluir_avaliacao_rota(id_avaliacao):
+def importar_avaliacao_rota(id_aluno):
+    try:
+        importar_avaliacao( request.files.get('arquivo'), id_aluno, session.get('id_usuario') )
+        return redirect(url_for( 'avaliacoes_usuario', id_aluno=id_aluno ))
+    except ValueError as erro:
+        return jsonify({ "sucesso": False, "mensagem": str(erro) }), 400
+    except Exception as erro:
+        print("Erro ao importar avaliação:", erro)
+        return jsonify({ "sucesso": False, "mensagem": "Erro ao importar a avaliação." }), 500
+
+@app.route('/avaliacoes/<int:id_avaliacao>')
+@login_required
+def visualizar_avaliacao(id_avaliacao):
+    arquivo = obter_avaliacao_pdf(id_avaliacao)
+    return send_file( BytesIO(arquivo), mimetype="application/pdf" )
+
+@app.route('/avaliacoes_usuario/<int:id_aluno>/excluir/<int:id_avaliacao>', methods=['POST'])
+@login_required
+def excluir_avaliacao_rota(id_aluno,id_avaliacao):
     excluir_avaliacao(id_avaliacao)
-
-    return redirect(url_for('avaliacoes_usuario'))
+    return redirect(url_for( 'avaliacoes_usuario', id_aluno=id_aluno ))
 
 @app.route('/editar_usuario')
 @login_required

@@ -76,7 +76,7 @@
 <section class="card-branco card-largo acoes">
     {% if tipo|lower=='aluno' %} 
         <a href="{{ url_for('historico_aluno', id_aluno=id) }}"><i class="fa-regular fa-calendar-days"></i> HISTÓRICO</a>
-        <a href="{{ url_for('avaliacoes_usuario', id=id) }}"><i class="fa-regular fa-file"></i> AVALIAÇÕES</a>
+        <a href="{{ url_for('avaliacoes_usuario', id_aluno=id) }}"><i class="fa-regular fa-file"></i> AVALIAÇÕES</a>
     {% endif %}
     <a href="{{ url_for('editar_usuario', tipo=tipo, id=id) }}"><i class="fa-regular fa-pen-to-square"></i> EDITAR</a>
 </section>
