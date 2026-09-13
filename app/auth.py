@@ -1,6 +1,7 @@
 from functools import wraps
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session ,jsonify, redirect, url_for
 from app.database.supabase import supabase
+
 
 auth = Blueprint("auth", __name__)
 
@@ -60,3 +61,27 @@ def logout():
 
     session.clear()
     return redirect(url_for("auth.login"))
+
+# 1. Rota para solicitar o envio do e-mail de recuperação
+@auth.route("/esqueci_senha", methods=["GET", "POST"])
+def esqueci_senha():
+    if request.method == "POST":
+        email = request.form.get("email")
+        
+        try:
+            # Envia o e-mail pelo Supabase redirecionando de volta para a sua rota de redefinição
+            supabase.auth.reset_password_for_email(
+                email, 
+                {"redirect_to": request.host_url + "redefinir_senha"}
+            )
+            return render_template("esqueci_senha.html", sucesso="E-mail de recuperação enviado! Verifique sua caixa de entrada.")
+        except Exception as erro:
+            print("Erro ao solicitar recuperação:", erro)
+            return render_template("esqueci_senha.html", erro="Erro ao enviar e-mail. Verifique o endereço digitado.")
+
+    return render_template("esqueci_senha.html")
+
+
+@auth.route("/redefinir_senha", methods=["GET"])
+def redefinir_senha():
+    return render_template("redefinir_senha.html")

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão PROMO - Redefinir Senha</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    {% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
+    <style>
+        main {
+            height: 100dvh;
+            padding: 0 2.6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            margin-bottom: 3rem;
+        }
+        button {
+            margin: 2rem 0 1rem 0;
+            width: 100%;
+            max-width: 400px;
+            filter: drop-shadow(0px 2px 5px rgb(0,0,0,0.20));
+        }
+        input::placeholder {
+            font-size: 1.15rem;
+        }
+        .input-flex {
+            margin: 8px 0 16px 0;
+            max-width: 400px;
+            position: relative;
+        }
+        input[type="password"],
+        input[type="text"] {
+            min-width: auto;
+            width: 100%;
+            padding-right: 2.5rem;
+        }
+        i.fa-solid {
+            color: black;
+        }
+        .toggle-password {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .toggle-password:hover {
+            color: #d9534f;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body class="bg-branco">
+
+<main>
+    <h1>Redefinir Senha</h1>
+
+    <form id="form-redefinir">
+        <div class="input input-flex">
+            <input type="password" name="senha" id="senha" placeholder="Nova Senha (mín. 6 dígitos)" required minlength="6" />
+            <i class="fa-solid fa-eye toggle-password" id="btn-toggle-senha1" data-target="senha"></i>
+        </div>
+
+        <div class="input input-flex">
+            <input type="password" name="confirmar_senha" id="confirmar_senha" placeholder="Confirme a Nova Senha" required minlength="6" />
+            <i class="fa-solid fa-eye toggle-password" id="btn-toggle-senha2" data-target="confirmar_senha"></i>
+        </div>
+
+        <button type="submit" class="btn-vermelho" id="btn-submit">
+            Salvar e Entrar
+        </button>
+    </form>
+</main>
+
+<script>
+    const SUPABASE_URL = "{{ config['SUPABASE_URL'] }}"; 
+    const SUPABASE_KEY = "{{ config['SUPABASE_PUBLISHABLE_KEY'] }}"; 
+
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. Alternar visualização da senha (Olho)
+        const toggles = document.querySelectorAll(".toggle-password");
+        toggles.forEach(toggle => {
+            toggle.addEventListener("click", function () {
+                const targetId = this.getAttribute("data-target");
+                const input = document.getElementById(targetId);
+                if (input) {
+                    const isPassword = input.getAttribute("type") === "password";
+                    input.setAttribute("type", isPassword ? "text" : "password");
+                    this.classList.toggle("fa-eye");
+                    this.classList.toggle("fa-eye-slash");
+                }
+            });
+        });
+
+        // 2. Envio do Formulário
+        const form = document.getElementById("form-redefinir");
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const senha = document.getElementById("senha").value;
+            const confirmarSenha = document.getElementById("confirmar_senha").value;
+
+            if (senha.length < 6) {
+                alert("A senha deve conter no mínimo 6 caracteres.");
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                alert("As senhas não coincidem. Digite novamente.");
+                return;
+            }
+
+            const btnSubmit = document.getElementById("btn-submit");
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Atualizando...";
+
+            const { data, error } = await _supabase.auth.updateUser({
+                password: senha
+            });
+
+            if (error) {
+                alert("Erro ao alterar senha: " + error.message);
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Salvar e Entrar";
+            } else {
+                alert("Senha redefinida com sucesso!");
+                window.location.href = "{{ url_for('auth.login') }}";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

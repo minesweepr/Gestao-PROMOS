@@ -35,14 +35,25 @@
         .input-flex {
             margin: 8px 0 16px 0;
             max-width: 400px;
+            position: relative;
         }
         input[type="text"],
         input[type="password"],
         input[type="email"] {
             min-width: auto;
+            width: 100%;
+            padding-right: 2.5rem; /* Garante que o texto não fique sob o ícone */
         }
         i.fa-solid {
             color: black;
+        }
+        /* Estilo para o ícone interativo de alternar a senha */
+        .toggle-password {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .toggle-password:hover {
+            color: #d9534f;
         }
     </style>
     {% endblock %}
@@ -68,7 +79,7 @@
 
             <div class="input input-flex">
                 <input type="password" name="senha" id="senha" placeholder="Senha" required />
-                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-eye toggle-password" id="btn-toggle-senha" title="Mostrar/Ocultar Senha"></i>
             </div>
 
             <button type="submit" class="btn-vermelho">
@@ -77,7 +88,29 @@
 
         </form>
     {% endblock %}
+    <a href="{{ url_for('auth.esqueci_senha') }}" style="display: block; margin-top: 10px; font-size: 0.9rem;">Esqueceu a senha?</a>
+
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById("btn-toggle-senha");
+        const passwordInput = document.getElementById("senha");
+
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener("click", function () {
+                // Alterna o tipo do input entre 'password' e 'text'
+                const isPassword = passwordInput.getAttribute("type") === "password";
+                passwordInput.setAttribute("type", isPassword ? "text" : "password");
+
+                // Alterna os ícones do FontAwesome
+                this.classList.toggle("fa-eye");
+                this.classList.toggle("fa-eye-slash");
+            });
+        }
+    });
+</script>
+
 
 </body>
 </html>

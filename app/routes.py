@@ -226,3 +226,4 @@ def excluir_avaliacao_rota(id_aluno,id_avaliacao):
 @login_required
 def editar_usuario():
     return render_template('editar_usuario.html')
+

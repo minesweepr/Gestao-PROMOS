@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão PROMO - Esqueci a Senha</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <style>
+        main { height: 100dvh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .input-flex { margin: 8px 0 16px 0; max-width: 400px; width: 100%; position: relative; }
+        button { width: 100%; max-width: 400px; margin-top: 1rem; }
+    </style>
+</head>
+<body class="bg-branco">
+
+<main>
+    <h1>Recuperar Senha</h1>
+    
+    {% if mensagem_sucesso or sucesso %}
+        <p style="color: green; margin-bottom: 1rem;">{{ sucesso }}</p>
+    {% endif %}
+    {% if erro %}
+        <p style="color: red; margin-bottom: 1rem;">{{ erro }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('auth.esqueci_senha') }}">
+        <div class="input input-flex">
+            <input type="email" name="email" placeholder="Digite seu e-mail cadastrado" required />
+            <i class="fa-solid fa-envelope"></i>
+        </div>
+        <button type="submit" class="btn-vermelho">Enviar E-mail de Recuperação</button>
+    </form>
+    
+    <br>
+    <a href="{{ url_for('auth.login') }}">Voltar para o Login</a>
+</main>
+
+</body>
+</html>
