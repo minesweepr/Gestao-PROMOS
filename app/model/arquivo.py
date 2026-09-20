@@ -10,7 +10,7 @@ def listar_avaliacoes(id_aluno=None):
     consulta = (
         supabase
         .table("avaliacao")
-        .select("id_avaliacao, arquivo_pdf, data_avaliacao, aluno(nome)")
+        .select( "id_avaliacao, arquivo_pdf, data_avaliacao, " "aluno!avaliacao_id_aluno_fkey(nome)" ) 
         .order("id_avaliacao", desc=True)
     )
     if id_aluno:
@@ -23,10 +23,9 @@ def listar_avaliacoes(id_aluno=None):
             "id_avaliacao": avaliacao["id_avaliacao"],
             "nome": aluno.get("nome", "Aluno"),
             "arquivo_pdf": avaliacao.get("arquivo_pdf"),
-            "nome_arquivo": avaliacao.get("arquivo_pdf", "").split("/")[-1].split("_", 1)[-1],
+            "nome_arquivo":(avaliacao.get("arquivo_pdf", "").split("/")[-1].split("_", 1)[-1]),
             "data_avaliacao": avaliacao.get("data_avaliacao")
-        })
-
+        })        
     return avaliacoes
 
 def listar_alunos():
