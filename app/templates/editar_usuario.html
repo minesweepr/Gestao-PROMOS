@@ -2,74 +2,105 @@
 
 {% block estilo %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+<style>
+    .oculto {
+        display: none !important;
+    }
+</style>
 {% endblock %}
 
 {% block conteudo %}
-<form class="card-branco card-largo">
-    <h2>Editar Usuário</h2>
+<form class="card-branco card-largo" method="POST" action="{{ url_for('editar_usuario', tipo=tipo, id=id) }}">
+    <h2>Editar {{ 'Aluno' if tipo.lower() == 'aluno' else 'Usuário' }}</h2>
+
+    {% if erro %}
+    <p style="color: red; margin-bottom: 1rem; text-align: center; font-weight: bold;">{{ erro }}</p>
+    {% endif %}
+
     <section>
         <label for="nome">Nome:</label>
-        <input type="text" name="nome" id="nome" placeholder="Digite o nome completo" />
+        <input type="text" name="nome" id="nome" value="{{ registro.nome or '' }}" placeholder="Digite o nome completo" required />
     </section>
     
     <section>
         <label for="cpf">CPF:</label>
-        <input type="text" name="cpf" id="cpf" placeholder="Digite o CPF" />
+        <input type="text" name="cpf" id="cpf" value="{{ registro.cpf or '' }}" placeholder="Digite o CPF" required maxlength="11" />
     </section>
     
     <section>
-        <label for="cargo">Cargo do Usuário:</label>
-        <select name="cargo" id="cargo">
-            <option value="" disabled selected>Selecione o Cargo</option>
-            <option value="1">Administrador</option>
-            <option value="2">Aluno</option>
-            <option value="3">Estagiário</option>
+        <label for="cargo">Cargo / Perfil:</label>
+        <select name="cargo" id="cargo" required>
+            <option value="" disabled>Selecione o Cargo</option>
+            <option value="ADMINISTRADOR" {% if registro.cargo == 'ADMINISTRADOR' %}selected{% endif %}>Administrador</option>
+            <option value="ESTAGIARIO" {% if registro.cargo == 'ESTAGIARIO' %}selected{% endif %}>Estagiário</option>
+            <option value="ALUNO" {% if tipo.lower() == 'aluno' or registro.cargo == 'ALUNO' %}selected{% endif %}>Aluno</option>
         </select>
     </section>
-    <!--TODO: a partir da escolha do cargo, aparece o tipo de informação dele.
-              não precisa ser do jeito que eu fiz, com diferentes articles,
-              é só para visualizar a ideia-->
-    <article id="info-aluno">
+
+    <!-- Bloco específico para ALUNO -->
+    <article id="info-aluno" class="oculto">
         <section>
             <label for="dnasc">Data de Nascimento:</label>
-            <input type="date" name="dnasc" id="dnasc" />
+            <input type="date" name="dnasc" id="dnasc" value="{{ registro.data_nascimento or '' }}" />
         </section>
         
         <section>
-            <label for="cobranca">Tipo de Cobrança:</label>
-            <select name="cobranca" id="cobranca">
-                <option value="" disabled selected>Selecione a Cobrança</option>
-                <option value="1">Meia</option>
-                <option value="2">Inteira</option>
-                <option value="3">Gratuidade</option>
-                <option value="4">Outro</option>
-            </select>
-        </section>
-        
+    <label for="cobranca">Tipo de Cobrança:</label>
+    <select name="cobranca" id="cobranca" required>
+        <option value="" disabled {% if not registro.tipo_aluno %}selected{% endif %}>Selecione a Cobrança</option>
+        <option value="PAGA_MEIA" {% if registro.tipo_aluno and registro.tipo_aluno.upper() in ['PAGA_MEIA', 'MEIA'] %}selected{% endif %}>Meia</option>
+        <option value="PAGA_INTEIRA" {% if registro.tipo_aluno and registro.tipo_aluno.upper() in ['PAGA_INTEIRA', 'INTEIRA'] %}selected{% endif %}>Inteira</option>
+        <option value="GRATUIDADE" {% if registro.tipo_aluno and registro.tipo_aluno.upper() == 'GRATUIDADE' %}selected{% endif %}>Gratuidade</option>
+    </select>
+</section>
+
         <section>
-            <label for="saldo">Saldo:</label>
-            <input type="number" name="saldo" id="saldo" placeholder="R$" />
-        </section>
-        
-        <section>
-            <label for="situacao">Situação:</label>
-            <select name="situacao" id="situacao">
-                <option value="1">Ativo</option> <!--TODO: começa com o que esta no BDD-->
-                <option value="2">Inativo</option>
-            </select>
+            <label for="telefone">Telefone:</label>
+            <input type="text" name="telefone" id="telefone" value="{{ registro.telefone or '' }}" placeholder="Digite o telefone" />
         </section>
     </article>
 
-    <article id="info-funcionario">
+    <!-- Bloco específico para FUNCIONÁRIOS (Admin / Estagiário) -->
+    <article id="info-funcionario" class="oculto">
         <section>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Digite o email" />
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" value="{{ registro.email or '' }}" placeholder="Digite o e-mail" />
         </section>
     </article>
 
-    <section>
-        <button class="btn-preto">Cancelar</button>
-        <button class="btn-vermelho">Cadastrar</button>
-    </section>
+    <section style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
+    <a href="{{ url_for('informacoes_usuario', tipo=tipo, id=id) }}" class="btn-preto" style="text-align: center; text-decoration: none; flex: 1; display: flex; align-items: center; justify-content: center;">
+        Cancelar
+    </a>
+    <button type="submit" class="btn-vermelho" style="flex: 1;">
+        Salvar
+    </button>
+</section>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectCargo = document.getElementById("cargo");
+        const infoAluno = document.getElementById("info-aluno");
+        const infoFuncionario = document.getElementById("info-funcionario");
+
+        function alternarExibicao() {
+            const valor = selectCargo.value;
+
+            if (valor === "ALUNO") {
+                infoAluno.classList.remove("oculto");
+                infoFuncionario.classList.add("oculto");
+            } else if (valor === "ADMINISTRADOR" || valor === "ESTAGIARIO") {
+                infoFuncionario.classList.remove("oculto");
+                infoAluno.classList.add("oculto");
+            } else {
+                infoAluno.classList.add("oculto");
+                infoFuncionario.classList.add("oculto");
+            }
+        }
+
+        selectCargo.addEventListener("change", alternarExibicao);
+        alternarExibicao();
+    });
+</script>
 {% endblock %}

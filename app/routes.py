@@ -16,7 +16,6 @@ from app.model.presenca import listar_presencas_hoje, presenca_aluno_marcar, pre
 @app.route('/cadastrar_usuario', methods=['GET', 'POST'])
 @login_required
 def cadastrar_usuario():
-    # Trava Backend: Apenas Administradores podem acessar esta rota
     if session.get("usuario_cargo") != "ADMINISTRADOR":
         if request.method == 'POST':
             return jsonify({"sucesso": False, "mensagem": "Acesso negado: Apenas administradores podem cadastrar usuários."}), 403
@@ -31,7 +30,6 @@ def cadastrar_usuario():
             return jsonify({"sucesso": False, "mensagem": "O CPF deve conter exatamente 11 números."}), 400
 
         try:
-            # 1. CADASTRO DE USUÁRIO DO SISTEMA (ADMINISTRADOR / ESTAGIARIO)
             if perfil in ['ADMINISTRADOR', 'ESTAGIARIO']:
                 email = request.form.get('email')
                 senha = request.form.get('senha')
@@ -61,7 +59,6 @@ def cadastrar_usuario():
                 supabase_admin.table('usuario').insert(dados_usuario).execute()
                 return jsonify({"sucesso": True, "mensagem": f"Usuário ({perfil.title()}) cadastrado com sucesso!"})
 
-            # 2. CADASTRO DE ALUNO
             elif perfil == 'ALUNO':
                 telefone = request.form.get('telefone')
                 email_aluno = request.form.get('email_aluno')
@@ -75,7 +72,7 @@ def cadastrar_usuario():
                     "email": email_aluno if email_aluno else None,
                     "data_nascimento": dnasc if dnasc else None,
                     "data_entrada": str(date.today()),
-                    "tipo_aluno": tipo_aluno,
+                    "tipo_aluno": tipo_aluno.upper() if tipo_aluno else None,
                     "situacao": "ATIVO"
                 }
 
@@ -100,11 +97,11 @@ def cadastrar_usuario():
 @app.route('/presenca')
 @login_required
 def presenca():
-    alunos=[{'id_aluno': a['id_aluno'], 'nome': a['nome']} for a in aluno_listar_todos('ATIVO')]
-    ids_presenca={p['id_aluno'] for p in listar_presencas_hoje()}
+    alunos = [{'id_aluno': a['id_aluno'], 'nome': a['nome']} for a in aluno_listar_todos('ATIVO')]
+    ids_presenca = {p['id_aluno'] for p in listar_presencas_hoje()}
 
     for aluno in alunos:
-        aluno['presente']=aluno['id_aluno'] in ids_presenca
+        aluno['presente'] = aluno['id_aluno'] in ids_presenca
 
     return render_template('presenca.html', alunos=alunos)
 
@@ -174,9 +171,13 @@ def visualizar_notificacao(id_alerta):
 @login_required
 def usuarios():
     tipo_usuario = request.args.get('tipo', 'todos').lower()
-    
-    alunos=[{'id_aluno': a['id_aluno'], 'nome': a['nome'], 'tipo': 'Aluno'} for a in aluno_listar_todos()]
-    usuarios=[ {'id_usuario': u['id_usuario'], 'nome': u['nome'], 'tipo': formatar_label(u['cargo']) } for u in usuario_listar_todos() if tipo_usuario == 'todos' or u['cargo'].lower() == tipo_usuario]
+   
+    alunos = [{'id_aluno': a['id_aluno'], 'nome': a['nome'], 'tipo': 'Aluno'} for a in aluno_listar_todos()]
+    usuarios = [
+        {'id_usuario': u['id_usuario'], 'nome': u['nome'], 'tipo': formatar_label(u.get('cargo', ''))}
+        for u in usuario_listar_todos()
+        if tipo_usuario == 'todos' or u.get('cargo', '').lower() == tipo_usuario
+    ]
 
     if tipo_usuario == 'aluno':
         todos_usuarios = alunos
@@ -184,46 +185,104 @@ def usuarios():
         todos_usuarios = usuarios
     else:
         todos_usuarios = alunos + usuarios
+
     return render_template('usuarios.html', todos_usuarios=todos_usuarios, tipo_usuario=tipo_usuario)
 
 @app.route('/informacoes_usuario/<string:tipo>/<int:id>')
 @login_required
 def informacoes_usuario(tipo, id):
-    registro=aluno_listar_por_id(id) if tipo.lower()=='aluno' else usuario_listar_por_id(id)
+    registro = aluno_listar_por_id(id) if tipo.lower() == 'aluno' else usuario_listar_por_id(id)
     return render_template('informacoes_usuario.html', nome=registro.get('nome'), tipo=tipo, id=id, registro=montar_registro(registro))
 
 @app.route('/avaliacoes_usuario/<int:id_aluno>')
 @login_required
 def avaliacoes_usuario(id_aluno):
     avaliacoes = listar_avaliacoes(id_aluno)
-    return render_template( 'avaliacoes_usuario.html', avaliacoes=avaliacoes, id_aluno=id_aluno )
+    return render_template('avaliacoes_usuario.html', avaliacoes=avaliacoes, id_aluno=id_aluno)
 
 @app.route('/avaliacoes_usuario/<int:id_aluno>/importar', methods=['POST'])
 @login_required
 def importar_avaliacao_rota(id_aluno):
     try:
-        importar_avaliacao( request.files.get('arquivo'), id_aluno, session.get('id_usuario') )
-        return redirect(url_for( 'avaliacoes_usuario', id_aluno=id_aluno ))
+        importar_avaliacao(request.files.get('arquivo'), id_aluno, session.get('id_usuario'))
+        return redirect(url_for('avaliacoes_usuario', id_aluno=id_aluno))
     except ValueError as erro:
-        return jsonify({ "sucesso": False, "mensagem": str(erro) }), 400
+        return jsonify({"sucesso": False, "mensagem": str(erro)}), 400
     except Exception as erro:
         print("Erro ao importar avaliação:", erro)
-        return jsonify({ "sucesso": False, "mensagem": "Erro ao importar a avaliação." }), 500
+        return jsonify({"sucesso": False, "mensagem": "Erro ao importar a avaliação."}), 500
 
 @app.route('/avaliacoes/<int:id_avaliacao>')
 @login_required
 def visualizar_avaliacao(id_avaliacao):
     arquivo = obter_avaliacao_pdf(id_avaliacao)
-    return send_file( BytesIO(arquivo), mimetype="application/pdf" )
+    return send_file(BytesIO(arquivo), mimetype="application/pdf")
 
 @app.route('/avaliacoes_usuario/<int:id_aluno>/excluir/<int:id_avaliacao>', methods=['POST'])
 @login_required
-def excluir_avaliacao_rota(id_aluno,id_avaliacao):
+def excluir_avaliacao_rota(id_aluno, id_avaliacao):
     excluir_avaliacao(id_avaliacao)
-    return redirect(url_for( 'avaliacoes_usuario', id_aluno=id_aluno ))
+    return redirect(url_for('avaliacoes_usuario', id_aluno=id_aluno))
 
-@app.route('/editar_usuario')
+@app.route('/editar_usuario/<string:tipo>/<int:id>', methods=['GET', 'POST'])
 @login_required
-def editar_usuario():
-    return render_template('editar_usuario.html')
+def editar_usuario(tipo, id):
+    if session.get("usuario_cargo") != "ADMINISTRADOR":
+        return redirect(url_for('presenca'))
 
+    is_aluno = tipo.lower() == 'aluno'
+
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        cpf = request.form.get('cpf')
+
+        try:
+            if is_aluno:
+                dnasc = request.form.get('dnasc')
+                cobranca_raw = request.form.get('cobranca', '').upper().strip()
+                telefone = request.form.get('telefone')
+
+                # Mapeamento de compatibilidade para garantir os valores exatos do Enum
+                mapeamento_cobranca = {
+                    'MEIA': 'PAGA_MEIA',
+                    'INTEIRA': 'PAGA_INTEIRA',
+                    'PAGA_MEIA': 'PAGA_MEIA',
+                    'PAGA_INTEIRA': 'PAGA_INTEIRA',
+                    'GRATUIDADE': 'GRATUIDADE'
+                }
+
+                cobranca_enum = mapeamento_cobranca.get(cobranca_raw, cobranca_raw if cobranca_raw else None)
+
+                dados_atualizados = {
+                    "nome": nome,
+                    "cpf": cpf,
+                    "data_nascimento": dnasc if dnasc else None,
+                    "tipo_aluno": cobranca_enum,
+                    "telefone": telefone if telefone else None
+                }
+
+                supabase_admin.table('aluno').update(dados_atualizados).eq('id_aluno', id).execute()
+            else:
+                cargo = request.form.get('cargo')
+                email = request.form.get('email')
+
+                dados_atualizados = {
+                    "nome": nome,
+                    "cpf": cpf,
+                    "cargo": cargo,
+                    "email": email
+                }
+
+                supabase_admin.table('usuario').update(dados_atualizados).eq('id_usuario', id).execute()
+
+            return redirect(url_for('informacoes_usuario', tipo=tipo, id=id))
+
+        except Exception as erro:
+            print("\n================ ERRO NO UPDATE SUPABASE ================")
+            print(erro)
+            print("=========================================================\n")
+            registro = aluno_listar_por_id(id) if is_aluno else usuario_listar_por_id(id)
+            return render_template('editar_usuario.html', registro=registro, tipo=tipo, id=id, erro=f"Erro ao salvar: {erro}")
+
+    registro = aluno_listar_por_id(id) if is_aluno else usuario_listar_por_id(id)
+    return render_template('editar_usuario.html', registro=registro, tipo=tipo, id=id)
