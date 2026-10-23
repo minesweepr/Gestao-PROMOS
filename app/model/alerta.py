@@ -4,12 +4,26 @@ def listar_alertas():
     resposta = (
         supabase
         .table("alerta")
-        .select("*")
+        .select("*, aluno!alerta_id_aluno_fkey(nome)")
         .order("status", desc=False)
         .order("data_alerta", desc=True)
         .execute()
     )
-    return resposta.data or []
+
+    alertas = resposta.data or []
+
+    for alerta in alertas:
+        aluno = alerta.get("aluno")
+        nome_aluno = aluno.get("nome") if aluno else None
+        descricao = alerta.get("descricao") or ""
+
+        alerta["descricao_exibida"] = (
+            f"{nome_aluno} - {descricao}"
+            if nome_aluno
+            else descricao
+        )
+
+    return alertas
 
 def contar_nao_lidas():
     resposta = (
@@ -21,11 +35,10 @@ def contar_nao_lidas():
     )
     return resposta.count or 0
 
-def visualizar_alerta(id_alerta):
-    (
-        supabase
-        .table("alerta")
-        .update({"status": "VISUALIZADO"})
-        .eq("id_alerta", id_alerta)
+def atualizar_status_alerta(id_alerta, status):
+    return (
+        supabase.table('alerta')
+        .update({'status': status})
+        .eq('id_alerta', id_alerta)
         .execute()
     )

@@ -20,7 +20,7 @@
     <div class="center-flx">
         <i class="fa-regular fa-bell"></i>
         <h1>Notificações</h1>
-        <p class="accent-notif">{{ nao_lidas }} não lidas</p> 
+        <p id="contador-nao-lidas" class="accent-notif">{{ nao_lidas }} não lidas</p> 
     </div>
     <div></div>
 </header>
@@ -33,9 +33,12 @@
 
             <div>
                 <p class="notificacao-titulo {% if alerta.status == 'PENDENTE' %}unread{% endif %}">{{ alerta.tipo_alerta }}</p>
-                <p class="notificacao-desc">{{ alerta.descricao }}</p>
+                <p class="notificacao-desc">{{ alerta.descricao_exibida }}</p>
             </div>
-            <span class="notificacao-alerta accent-notif {% if alerta.status != 'PENDENTE' %}display-notif{% endif %}"></span>
+            <span class="status-notificacao {% if alerta.status != 'PENDENTE' %}display-notif{% endif %}">
+                <i class="fa-regular {% if alerta.status == 'PENDENTE' %}fa-envelope-open{% else %}fa-envelope{% endif %} icone-status"></i>
+                <span class="status-notificacao-bolinha {% if alerta.status != 'PENDENTE' %}display-notif{% endif %}"></span>
+            </span>
         </div>
     </article>
     {% endfor %}
@@ -43,29 +46,41 @@
 </main>
 
 <script>
+
 document.querySelectorAll('.notificacao').forEach(card => {
-
     card.addEventListener('click', async () => {
-
-        const indicador = card.querySelector('.notificacao-alerta');
-
-        if (indicador.classList.contains('display-notif')) {
-            return;
-        }
-
-        indicador.classList.add('display-notif');
+        const indicador = card.querySelector('.status-notificacao');
+        const bolinha = card.querySelector('.status-notificacao-bolinha');
+        const titulo = card.querySelector('.notificacao-titulo');
+        const icone = card.querySelector('.icone-status');
+        const status = titulo.classList.contains('unread') ? 'VISUALIZADO' : 'PENDENTE';
 
         try {
-            await fetch(
+            const resposta = await fetch(
                 `/notificacoes/${card.dataset.id}/visualizar`,
-                { method: 'PATCH' }
+                {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                }
             );
+
+            if (!resposta.ok) {
+                console.error('Erro ao atualizar notificação:', resposta.status);
+                return;
+            }
+
+            indicador.classList.toggle( 'display-notif', status === 'VISUALIZADO' );
+            bolinha.classList.toggle( 'display-notif', status !== 'PENDENTE' );
+            titulo.classList.toggle('unread', status === 'PENDENTE');
+            icone.classList.remove('fa-envelope', 'fa-envelope-open');
+            icone.classList.add( status === 'PENDENTE' ? 'fa-envelope-open' : 'fa-envelope' );
         } catch (erro) {
-            indicador.classList.remove('display-notif');
+            console.error('Erro ao atualizar notificação:', erro);
         }
     });
-
 });
+
 </script>
 </body>
 </html>

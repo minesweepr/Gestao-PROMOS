@@ -18,19 +18,20 @@ header h1 {
 header h1, .notificacao-titulo {
     font-weight: 600;
 }
-.accent-notif {
-    font-size: 0.6rem;
-    font-weight: bold;
-    color: white;
-    background-color: var(--accent);
-    border-radius: 20px;
-    padding: 5px;
-}
+
+
 .notificacao{
     position: relative;
     padding: 22px clamp(0.9rem, 5vw, 4rem);
     border-bottom: solid var(--cinza-claro) 1px;
+    background-color: white;
+    cursor: pointer;
 }
+
+.notificacao:has(.display-notif) {
+    background-color: #f7f7f7a1;
+}
+
 .notif-content {
     max-width: 80vw;
     justify-content: normal;
@@ -44,14 +45,7 @@ header h1, .notificacao-titulo {
     font-size: 0.85rem;
     overflow-wrap: break-word;
 }
-.notificacao-alerta{
-    position: absolute;
-    inset: 12px 5vw auto auto;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: var(--accent);
-}
+
 .fa-exclamation {
     width: 25px;
     aspect-ratio: 1;
@@ -65,11 +59,47 @@ header h1, .notificacao-titulo {
     color: var(--accent);
     font-weight: 700;
 }
-.display-notif {
-    /* ou display: none; */
+
+.accent-notif {
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: white;
+    background-color: var(--accent);
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.status-notificacao {
+    position: absolute;
+    inset: 12px 5vw auto auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.icone-status {
+    font-size: 16px;
+    color: var(--cinza-escuro);
+}
+
+.status-notificacao-bolinha {
+    position: absolute;
+    top: -1px;
+    right: -2px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--accent);
+}
+
+.status-notificacao-bolinha.display-notif {
     opacity: 0;
     visibility: hidden;
 }
+
 @media (max-width: 470px){
     .fa-exclamation {
         width: 31px;
@@ -103,9 +133,12 @@ header h1, .notificacao-titulo {
     .notificacao-desc{
         font-size:1rem;
     }
-    .notificacao-alerta {
-        position: static;
+
+   .status-notificacao {
+        position: relative;
+        inset: auto;
     }
+
     .fa-chevron-left {
         width: 64px;
     }

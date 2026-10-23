@@ -9,7 +9,7 @@ from app.utils.formatadores import formatar_label, montar_registro
 from app.model.aluno import aluno_listar_todos, aluno_listar_por_id
 from app.model.usuario import usuario_listar_todos, usuario_listar_por_id
 from app.model.historico import listar_historico, listar_historico_aluno
-from app.model.alerta import contar_nao_lidas, listar_alertas, visualizar_alerta
+from app.model.alerta import atualizar_status_alerta, contar_nao_lidas, listar_alertas
 from app.model.arquivo import excluir_avaliacao, importar_avaliacao, listar_avaliacoes, obter_avaliacao_pdf
 from app.model.presenca import listar_presencas_hoje, presenca_aluno_marcar, presenca_aluno_desmarcar
 
@@ -153,6 +153,10 @@ def historico_aluno(id_aluno):
 @login_required
 def notificacoes():
     alertas = listar_alertas()
+
+    for alerta in alertas:
+        alerta['tipo_alerta'] = formatar_label(alerta['tipo_alerta'])
+        
     nao_lidas = contar_nao_lidas()
 
     return render_template(
@@ -163,9 +167,18 @@ def notificacoes():
 
 @app.route('/notificacoes/<int:id_alerta>/visualizar', methods=['PATCH'])
 @login_required
-def visualizar_notificacao(id_alerta):
-    visualizar_alerta(id_alerta)
-    return '', 204
+def atualizar_notificacao(id_alerta):
+    status = (request.get_json(silent=True) or {}).get('status')
+
+    if status not in ('PENDENTE', 'VISUALIZADO'):
+        return jsonify(sucesso=False, mensagem='Status inválido.'), 400
+
+    try:
+        atualizar_status_alerta(id_alerta, status)
+        return jsonify(sucesso=True), 200
+    except Exception as erro:
+        print(f'Erro ao atualizar notificação: {erro}')
+        return jsonify(sucesso=False, mensagem='Erro ao atualizar notificação.'), 500
 
 @app.route('/usuarios')
 @login_required
