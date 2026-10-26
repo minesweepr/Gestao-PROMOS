@@ -12,7 +12,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@auth.route("/login", methods=["GET", "POST"])
+@auth.route("/", methods=["GET", "POST"])
 def login():
     if "usuario_id" in session:
         return redirect(url_for("presenca"))
